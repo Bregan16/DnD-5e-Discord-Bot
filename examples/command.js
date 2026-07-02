@@ -3,6 +3,8 @@ import express from 'express';
 import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
 import { DiscordRequest } from '../utils.js';
 
+const PORT = process.env.PORT || 3000;
+
 // Create and configure express app
 const app = express();
 
@@ -57,8 +59,8 @@ async function createCommand() {
   }
 }
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000');
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 
   createCommand();
 });
