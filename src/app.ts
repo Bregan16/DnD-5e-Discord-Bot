@@ -8,7 +8,7 @@ import {
   MessageComponentTypes,
   verifyKeyMiddleware,
 } from 'discord-interactions';
-import { getRandomEmoji, DiscordRequest } from './utils.js';
+import { getRandomEmoji, DiscordRequest } from '../utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 
 // Create an express app
@@ -21,9 +21,10 @@ const activeGames = {};
 
 // Determine if we should skip verification (for testing)
 const isTestEnv = process.env.NODE_ENV === 'test';
+const PUBLIC_KEY = process.env.PUBLIC_KEY || '';
 const interactionMiddleware = isTestEnv
     ? (req, res, next) => next()
-    : verifyKeyMiddleware(process.env.PUBLIC_KEY);
+    : verifyKeyMiddleware(PUBLIC_KEY);
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests

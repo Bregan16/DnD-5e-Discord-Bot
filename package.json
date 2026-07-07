@@ -3,15 +3,18 @@
   "private": true,
   "version": "1.0.0",
   "description": "Discord example app",
-  "main": "app.js",
+  "main": "dist/app.js",
   "type": "module",
   "engines": {
     "node": ">=18.x"
   },
   "scripts": {
-    "start": "node app.js",
-    "register": "node commands.js",
-    "dev": "nodemon app.js",
+    "dev": "tsx watch src/app.ts",
+    "build": "tsc",
+    "start": "node .",
+    "start:old": "node src/app.ts",
+    "register": "node src/commands.js",
+    "dev:old": "nodemon src/app.ts",
     "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },

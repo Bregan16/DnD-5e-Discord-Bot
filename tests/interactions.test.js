@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../app.js'; // Adjust path as necessary
+import { app } from '../src/app.ts'; // Adjust path as necessary
 import { InteractionType, InteractionResponseType } from 'discord-interactions';
 
 describe('Discord Slash Commands', () => {
