@@ -65,6 +65,17 @@ app.post('/interactions', interactionMiddleware, async function (req, res) {
       });
     }
 
+    // "char info" command
+    if (name === 'char_info') {
+      const userId = req.body.member.user.id;
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `Hello World\nYour User ID: ${userId}`,
+        },
+      });
+    }
+
     console.error(`unknown command: ${name}`);
     return res.status(400).json({ error: 'unknown command' });
   }
