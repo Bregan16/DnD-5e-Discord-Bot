@@ -45,14 +45,14 @@ app.post('/interactions', interactionMiddleware, async function (req, res) {
                         {
                             type: MessageComponentTypes.TEXT_DISPLAY,
                             // Fetches a random emoji to send from a helper function
-                            content: `hello world ${getRandomEmoji()}`
+                            content: `Hello world ${getRandomEmoji()}`
                         }
                     ]
                 },
             });
         }
-        // "char info" command
-        if (name === 'char_info') {
+        // "char" command
+        if (name === 'char') {
             const userId = req.body.member.user.id;
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

@@ -8,29 +8,21 @@ import {
   MessageComponentTypes,
   verifyKeyMiddleware,
 } from 'discord-interactions';
-import { getRandomEmoji, DiscordRequest } from '../utils.js';
+import { getRandomEmoji, DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 
 // Create an express app
 const app = express();
-app.use(express.json());
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
 // To keep track of our active games
 const activeGames = {};
 
-// Determine if we should skip verification (for testing)
-const isTestEnv = process.env.NODE_ENV === 'test';
-const PUBLIC_KEY = process.env.PUBLIC_KEY || '';
-const interactionMiddleware = isTestEnv
-    ? (req, res, next) => next()
-    : verifyKeyMiddleware(PUBLIC_KEY);
-
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  * Parse request body and verifies incoming requests using discord-interactions package
  */
-app.post('/interactions', interactionMiddleware, async function (req, res) {
+app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
   // Interaction id, type and data
   const { id, type, data } = req.body;
 
@@ -59,20 +51,9 @@ app.post('/interactions', interactionMiddleware, async function (req, res) {
             {
               type: MessageComponentTypes.TEXT_DISPLAY,
               // Fetches a random emoji to send from a helper function
-              content: `Hello world ${getRandomEmoji()}`
+              content: `hello world ${getRandomEmoji()}`
             }
           ]
-        },
-      });
-    }
-
-    // "char" command
-    if (name === 'char') {
-      const userId = req.body.member.user.id;
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: `Hello World\nYour User ID: ${userId}`,
         },
       });
     }
@@ -85,10 +66,6 @@ app.post('/interactions', interactionMiddleware, async function (req, res) {
   return res.status(400).json({ error: 'unknown interaction type' });
 });
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log('Listening on port', PORT);
-  });
-}
-
-export { app };
+app.listen(PORT, () => {
+  console.log('Listening on port', PORT);
+});

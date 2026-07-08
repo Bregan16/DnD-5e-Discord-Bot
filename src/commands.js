@@ -20,7 +20,7 @@ function createCommandChoices() {
 // Simple test command
 const TEST_COMMAND = {
   name: 'test',
-  description: 'Basic command',
+  description: 'Basic command!',
   type: 1,
   integration_types: [0, 1],
   contexts: [0, 1, 2],
@@ -45,14 +45,14 @@ const CHALLENGE_COMMAND = {
 };
 
 // New character info command
-const CHAR_INFO_COMMAND = {
-  name: 'char_info',
+const CHAR_COMMAND = {
+  name: 'char',
   description: 'Get information about your character',
   type: 1,
   integration_types: [0, 1],
   contexts: [0, 1, 2],
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, CHAR_INFO_COMMAND];
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, CHAR_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
