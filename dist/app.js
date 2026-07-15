@@ -1,75 +1,24 @@
 import 'dotenv/config';
-import express from 'express';
-import { InteractionResponseFlags, InteractionResponseType, InteractionType, MessageComponentTypes, verifyKeyMiddleware, } from 'discord-interactions';
-import { getRandomEmoji } from '../utils.js';
-// Create an express app
-const app = express();
-app.use(express.json());
-// Get port, or default to 3000
-const PORT = process.env.PORT || 3000;
-// To keep track of our active games
-const activeGames = {};
-// Determine if we should skip verification (for testing)
-const isTestEnv = process.env.NODE_ENV === 'test';
-const PUBLIC_KEY = process.env.PUBLIC_KEY || '';
-const interactionMiddleware = isTestEnv
-    ? (req, res, next) => next()
-    : verifyKeyMiddleware(PUBLIC_KEY);
-/**
- * Interactions endpoint URL where Discord will send HTTP requests
- * Parse request body and verifies incoming requests using discord-interactions package
- */
-app.post('/interactions', interactionMiddleware, async function (req, res) {
-    // Interaction id, type and data
-    const { id, type, data } = req.body;
-    /**
-     * Handle verification requests
-     */
-    if (type === InteractionType.PING) {
-        return res.send({ type: InteractionResponseType.PONG });
+import { Client, Events, GatewayIntentBits, } from 'discord.js';
+import { handleCommandInteraction } from './interactionHandler.js';
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds],
+});
+client.once(Events.ClientReady, (readyClient) => {
+    console.log(`Ready! Logged in as ${readyClient.user.tag}!`);
+});
+client.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isChatInputCommand()) {
+        return;
     }
-    /**
-     * Handle slash command requests
-     * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
-     */
-    if (type === InteractionType.APPLICATION_COMMAND) {
-        const { name } = data;
-        // "test" command
-        if (name === 'test') {
-            // Send a message into the channel where command was triggered from
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-                    components: [
-                        {
-                            type: MessageComponentTypes.TEXT_DISPLAY,
-                            // Fetches a random emoji to send from a helper function
-                            content: `hello world ${getRandomEmoji()}`
-                        }
-                    ]
-                },
-            });
-        }
-        // "char info" command
-        if (name === 'char_info') {
-            const userId = req.body.member.user.id;
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    content: `Hello World\nYour User ID: ${userId}`,
-                },
-            });
-        }
-        console.error(`unknown command: ${name}`);
-        return res.status(400).json({ error: 'unknown command' });
-    }
-    console.error('unknown interaction type', type);
-    return res.status(400).json({ error: 'unknown interaction type' });
+    await handleCommandInteraction(interaction);
 });
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log('Listening on port', PORT);
-    });
+    const token = process.env.DISCORD_TOKEN;
+    if (!token) {
+        throw new Error('DISCORD_TOKEN is required');
+    }
+    void client.login(token);
 }
-export { app };
+export { client };
+export { handleCommandInteraction };
