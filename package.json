@@ -13,9 +13,8 @@
     "build": "tsc",
     "start": "node .",
     "start:old": "node src/app.ts",
-    "register": "node src/commands.js",
+    "register": "tsx src/commands.ts",
     "dev:old": "nodemon src/app.ts",
-    "pretest": "npm run build",
     "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },
@@ -29,6 +28,7 @@
     "@types/node": "^26.1.0",
     "jest": "^30.4.2",
     "nodemon": "^3.0.0",
+    "ts-jest": "^29.4.11",
     "tsx": "^4.23.0"
   }
 }

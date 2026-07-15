@@ -1,12 +1,12 @@
 import { jest } from '@jest/globals';
-import { handleCommandInteraction } from '../dist/interactionHandler.js';
+import { handleCommandInteraction } from '../src/interactionHandler.js';
 
 describe('Discord Slash Commands', () => {
-  function createInteraction(commandName, userId = '1234567890') {
+  function createInteraction(commandName: string, userId = '1234567890') {
     return {
       commandName,
       user: { id: userId },
-      reply: jest.fn().mockResolvedValue(undefined),
+      reply: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
   }
 

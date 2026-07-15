@@ -3,25 +3,12 @@ import { REST, Routes, SlashCommandBuilder } from 'discord.js';
 import { getRPSChoices } from './game.js';
 import { capitalize } from './utils.js';
 
-// Get the game choices from game.js
-function createCommandChoices() {
-  const choices = getRPSChoices();
-  const commandChoices = [];
-
-  for (let choice of choices) {
-    commandChoices.push({
-      name: capitalize(choice),
-      value: choice.toLowerCase(),
-    });
-  }
-
-  return commandChoices;
+function createCommandChoices(): Array<{ name: string; value: string }> {
+  return getRPSChoices().map((choice) => ({
+    name: capitalize(choice),
+    value: choice.toLowerCase(),
+  }));
 }
-
-const commandChoices = createCommandChoices().map((choice) => ({
-  name: choice.name,
-  value: choice.value,
-}));
 
 const ALL_COMMANDS = [
   new SlashCommandBuilder().setName('test').setDescription('Basic command'),
@@ -33,7 +20,7 @@ const ALL_COMMANDS = [
         .setName('object')
         .setDescription('Pick your object')
         .setRequired(true)
-        .addChoices(...commandChoices),
+        .addChoices(...createCommandChoices()),
     ),
   new SlashCommandBuilder()
     .setName('char_info')
