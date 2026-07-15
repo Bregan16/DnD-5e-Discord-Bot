@@ -1,4 +1,4 @@
-import { getRandomEmoji } from '../utils.js';
+import { getRandomEmoji } from './utils.js';
 
 type CommandInteraction = {
   commandName: string;
@@ -12,7 +12,7 @@ export async function handleCommandInteraction(interaction: CommandInteraction) 
     return;
   }
 
-  if (interaction.commandName === 'char') {
+  if (interaction.commandName === 'char_info') {
     await interaction.reply(`Hello World\nYour User ID: ${interaction.user.id}`);
     return;
   }

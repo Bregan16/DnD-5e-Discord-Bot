@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { REST, Routes, SlashCommandBuilder } from 'discord.js';
 import { getRPSChoices } from './game.js';
-import { capitalize } from '../utils.js';
+import { capitalize } from './utils.js';
 
 // Get the game choices from game.js
 function createCommandChoices() {

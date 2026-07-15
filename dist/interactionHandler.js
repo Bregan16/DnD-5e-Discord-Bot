@@ -1,10 +1,10 @@
-import { getRandomEmoji } from '../utils.js';
+import { getRandomEmoji } from './utils.js';
 export async function handleCommandInteraction(interaction) {
     if (interaction.commandName === 'test') {
         await interaction.reply(`hello world ${getRandomEmoji()}!`);
         return;
     }
-    if (interaction.commandName === 'char') {
+    if (interaction.commandName === 'char_info') {
         await interaction.reply(`Hello World\nYour User ID: ${interaction.user.id}`);
         return;
     }
