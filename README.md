@@ -1,34 +1,28 @@
-# Getting Started app for Discord
+# D&D 5e Discord Bot
 
-https://duller-dispatch-henna.ngrok-free.dev/interactions
+A Discord bot for Dungeons & Dragons 5e that provides character information and game interactions.
 
-This project contains a basic rock-paper-scissors-style Discord bot built with `discord.js`.
-
-![Demo of app](https://github.com/discord/discord-example-app/raw/main/assets/getting-started-demo.gif?raw=true)
+**Repository:** [Bregan16/DnD-5e-Discord-Bot](https://github.com/Bregan16/DnD-5e-Discord-Bot)
 
 ## Project structure
-Below is a basic overview of the project structure:
+Below is an overview of the project structure:
 
 ```
 ├── src
-│   ├── examples    -> short, feature-specific sample apps
-│   │   ├── app.js
-│   │   ├── button.js
-│   │   ├── command.js
-│   │   ├── modal.js
-│   │   ├── selectMenu.js
-│   ├── app.ts      -> main entrypoint for bot client
-│   ├── commands.js -> slash command payloads + helpers
-│   ├── game.js     -> logic specific to RPS
-│   └── interactionHandler.ts -> slash command response logic
-├── dist         -> transpiled runtime output
-├── tests        -> Jest tests
-│   └── interactions.test.js
-├── .env.sample -> sample .env file
-├── utils.js    -> utility functions and enums
-├── package.json
-├── README.md
-└── .gitignore
+│   ├── examples         -> feature-specific example implementations
+│   ├── app.ts           -> main entrypoint for bot client
+│   ├── commands.ts      -> slash command definitions and registration
+│   ├── interactionHandler.ts -> slash command response logic
+│   ├── game.ts          -> game logic (rock-paper-scissors)
+│   ├── utils.ts         -> utility functions and enums
+│   └── assets           -> static assets
+├── dist                 -> compiled TypeScript output
+├── tests                -> Jest unit tests
+├── .env.sample          -> sample environment variables
+├── package.json         -> dependencies and scripts
+├── tsconfig.json        -> TypeScript configuration
+├── jest.config.js       -> Jest test configuration
+└── README.md
 ```
 
 ## Running app locally
@@ -43,50 +37,81 @@ Configuring the app is covered in detail in the [getting started guide](https://
 ### Setup project
 
 First clone the project:
-```
-git clone https://github.com/discord/discord-example-app.git
+```bash
+git clone https://github.com/Bregan16/DnD-5e-Discord-Bot.git
+cd DnD-5e-Discord-Bot
 ```
 
-Then navigate to its directory and install dependencies:
-```
-cd discord-example-app
+Then install dependencies:
+```bash
 npm install
 ```
 ### Get app credentials
 
-Fetch the credentials from your app's settings and add them to a `.env` file (see `.env.sample` for an example). You'll need your app ID (`APP_ID`) and bot token (`DISCORD_TOKEN`).
+1. Create a Discord application at [Discord Developers](https://discord.com/developers/applications)
+2. Copy your app ID and bot token
+3. Create a `.env` file (see `.env.sample` for an example):
+   ```bash
+   cp .env.sample .env
+   # Edit .env and add your credentials:
+   # APP_ID=your_app_id
+   # DISCORD_TOKEN=your_bot_token
+   ```
 
-Fetching credentials is covered in detail in the [getting started guide](https://discord.com/developers/docs/getting-started).
+See the [Discord getting started guide](https://discord.com/developers/docs/getting-started) for detailed instructions.
 
-> 🔑 Environment variables can be added to the `.env` file in Glitch or when developing locally, and in the Secrets tab in Replit (the lock icon on the left).
+### Build and register commands
 
-### Install slash commands
-
-The commands for the example app are set up in `commands.js`. All of the commands in the `ALL_COMMANDS` array at the bottom of `commands.js` will be installed when you run the `register` command configured in `package.json`:
-
+Build the TypeScript project:
+```bash
+npm run build
 ```
+
+Register slash commands with Discord:
+```bash
 npm run register
 ```
 
-### Run the app
+The commands are defined in `src/commands.ts` and include:
+- `/test` - Basic test command
+- `/challenge` - Challenge to rock-paper-scissors
+- `/char_info` - Get character information
 
-After your credentials are added, go ahead and run the app:
+### Run the bot
 
-```
+After registering commands, run the bot in development mode:
+```bash
 npm run dev
 ```
 
-> ⚙️ A package [like `nodemon`](https://github.com/remy/nodemon), which watches for local changes and restarts your app, may be helpful while locally developing.
+The bot watches for local changes and restarts automatically using `tsx`.
 
-If you aren't following the [getting started guide](https://discord.com/developers/docs/getting-started), you can move the contents of `examples/app.js` (the finished `app.js` file) to the top-level `app.js`.
+Alternatively, run the compiled version:
+```bash
+npm run build
+npm start
+```
 
-### Invite and run the bot
+### Testing
 
-This bot uses the Discord Gateway and does not need an Interactions Endpoint URL or ngrok tunnel.
-After registering commands with `npm run register`, invite your bot with the `applications.commands` and `bot` scopes and run it with `npm run start`.
+Run the test suite:
+```bash
+npm test
+```
 
-## Other resources
-- Read **[the documentation](https://discord.com/developers/docs/intro)** for in-depth information about API features.
-- Browse the `examples/` folder in this project for smaller, feature-specific code examples
-- Join the **[Discord Developers server](https://discord.gg/discord-developers)** to ask questions about the API, attend events hosted by the Discord API team, and interact with other devs.
-- Check out **[community resources](https://discord.com/developers/docs/topics/community-resources#community-resources)** for language-specific tools maintained by community members.
+Watch mode (useful during development):
+```bash
+npm run test:watch
+```
+
+## Resources
+- [Discord.js Documentation](https://discord.js.org/)
+- [Discord Developer Documentation](https://discord.com/developers/docs)
+- [Discord Developers Server](https://discord.gg/discord-developers)
+
+## Technology Stack
+- **Language:** TypeScript
+- **Discord Library:** discord.js v14+
+- **Node.js Version:** 18.x or higher
+- **Testing:** Jest
+- **Build Tool:** TypeScript Compiler (tsc)
