@@ -115,3 +115,11 @@ npm run test:watch
 - **Node.js Version:** 18.x or higher
 - **Testing:** Jest
 - **Build Tool:** TypeScript Compiler (tsc)
+
+
+## Git
+```bash
+git add * 
+git commit -m "Add Char Data" 
+git push 
+```
