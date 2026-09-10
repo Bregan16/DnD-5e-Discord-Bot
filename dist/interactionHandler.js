@@ -5,7 +5,7 @@ export async function handleCommandInteraction(interaction) {
         return;
     }
     if (interaction.commandName === 'char_info') {
-        await interaction.reply(`Hello World\nYour User ID: ${interaction.user.id}`);
+        await interaction.reply(`Hello World\nYour User ID: ${interaction.user}`);
         return;
     }
     console.error(`unknown command: ${interaction.commandName}`);
