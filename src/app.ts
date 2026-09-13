@@ -14,10 +14,6 @@ const discordClient = new Client({
   intents: [GatewayIntentBits.Guilds],
 });
 
-discordClient.once(Events.ClientReady, (readyClient) => {
-  console.log(`Ready! Logged in as ${readyClient.user.tag}!`);
-});
-
 const rootPath = fileURLToPath(import.meta.url);
 await CommandLoader(discordClient, rootPath)
 await EventUtility(discordClient)
