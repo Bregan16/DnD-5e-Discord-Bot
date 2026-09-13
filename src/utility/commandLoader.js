@@ -7,8 +7,8 @@ import {
 
 export default async function CommandLoader(discordClient, rootPath) {
     discordClient.commands = new Collection();
-    const __dirname = path.dirname(rootPath);
 
+    const __dirname = path.dirname(rootPath);
     const foldersPath = path.join(__dirname, 'commands');
     const commandFolders = fs.readdirSync(foldersPath);
 

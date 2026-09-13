@@ -20,7 +20,7 @@ export default async function EventUtility(discordClient) {
     	}
 
     	try {
-    		await command.execute(interaction);
+    		await command.execute(interaction, discordClient);
     	} catch (error) {
     		console.error(error);
     		if (interaction.replied || interaction.deferred) {

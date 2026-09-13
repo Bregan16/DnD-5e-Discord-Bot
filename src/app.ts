@@ -8,6 +8,7 @@ import {
 } from 'discord.js';
 
 import CommandLoader from './utility/commandLoader'
+import CharacterManager from './utility/chracterLoader'
 import EventUtility from './utility/eventUtility'
 
 const discordClient = new Client({
@@ -15,8 +16,9 @@ const discordClient = new Client({
 });
 
 const rootPath = fileURLToPath(import.meta.url);
-await CommandLoader(discordClient, rootPath)
-await EventUtility(discordClient)
+await CommandLoader(discordClient, rootPath);
+await CharacterManager(discordClient, rootPath);
+await EventUtility(discordClient);
 
 if (process.env.NODE_ENV !== 'test') {
   const token = process.env.DISCORD_TOKEN;
