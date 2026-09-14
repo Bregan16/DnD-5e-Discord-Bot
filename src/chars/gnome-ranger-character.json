@@ -182,6 +182,12 @@
           "isProficient": false
         },
         {
+          "name": "Religion",
+          "ability": "Intelligence",
+          "modifier": 0,
+          "isProficient": false
+        },
+        {
           "name": "Sleight of Hand",
           "ability": "Dexterity",
           "modifier": 3,
