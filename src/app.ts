@@ -2,18 +2,14 @@ import 'dotenv/config';
 import { fileURLToPath } from 'node:url';
 import {
   Client,
-  Collection,
-  Events,
   GatewayIntentBits,
 } from 'discord.js';
 
-import CommandLoader from './utility/commandLoader'
-import CharacterManager from './utility/chracterLoader'
-import EventUtility from './utility/eventUtility'
+import { CommandLoader, CharacterManager, EventUtility } from './utility/utility'
 
 const discordClient = new Client({
   intents: [GatewayIntentBits.Guilds],
-});
+}) as DiscordClient;
 
 const rootPath = fileURLToPath(import.meta.url);
 await CommandLoader(discordClient, rootPath);

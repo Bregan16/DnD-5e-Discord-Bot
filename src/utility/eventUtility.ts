@@ -1,18 +1,16 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
-  Events,
+	Events,
+	MessageFlags,
 } from 'discord.js';
 
-export default async function EventUtility(discordClient) {
+export default async function EventUtility(discordClient: DiscordClient) {
     discordClient.once(Events.ClientReady, (readyClient) => {
       console.log(`Ready! Logged in as ${readyClient.user.tag}!`);
     });
 
     discordClient.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isChatInputCommand()) return;
-    	const command = interaction.client.commands.get(interaction.commandName);
+    	const command = discordClient.commands.get(interaction.commandName);
 
     	if (!command) {
     		console.error(`No command matching ${interaction.commandName} was found.`);

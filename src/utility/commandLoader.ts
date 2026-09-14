@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import {
   Collection,
 } from 'discord.js';
 
-export default async function CommandLoader(discordClient, rootPath) {
+export default async function CommandLoader(discordClient: DiscordClient, rootPath: string) {
     discordClient.commands = new Collection();
 
     const __dirname = path.dirname(rootPath);
@@ -14,7 +14,7 @@ export default async function CommandLoader(discordClient, rootPath) {
 
     for (const folder of commandFolders) {
     	const commandsPath = path.join(foldersPath, folder);
-    	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
+    	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js') || file.endsWith('.ts'));
     	for (const file of commandFiles) {
     		const filePath = path.join(commandsPath, file);
             const commandModule = await import(pathToFileURL(filePath).href);
