@@ -10,7 +10,8 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "allowJs": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
