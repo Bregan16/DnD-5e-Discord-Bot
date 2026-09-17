@@ -1,7 +1,7 @@
 import {
-  Collection,
+	Collection,
 } from 'discord.js';
-import LoadFiles from "./loadFiles";
+import LoadFiles from './loadFiles';
 
 export default async function CommandLoader(discordClient: DiscordClient, rootPath: string) {
 	const fileList = await LoadFiles(rootPath, 'commands');
@@ -12,7 +12,8 @@ export default async function CommandLoader(discordClient: DiscordClient, rootPa
 		const command = commandModule.default ?? commandModule;
 		if ('data' in command && 'execute' in command) {
 			discordClient.commands.set(command.data.name, command);
-		} else {
+		}
+		else {
 			console.log(`[WARNING] The command at ${file} is missing a required "data" or "execute" property.`);
 		}
 	}

@@ -1,12 +1,33 @@
-const js = require('@eslint/js');
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 
-module.exports = [
+export default [
+	{
+		ignores: ['dist/**'],
+	},
 	js.configs.recommended,
 	{
+		files: ['src/**/*.ts'],
 		languageOptions: {
 			ecmaVersion: 'latest',
+			sourceType: 'module',
+			globals: {
+				process: 'readonly',
+			},
+			parser: tsParser,
+			parserOptions: {
+				project: './tsconfig.json',
+				tsconfigRootDir: process.cwd(),
+			},
+		},
+		plugins: {
+			'@typescript-eslint': tsPlugin,
 		},
 		rules: {
+			...tsPlugin.configs.recommended.rules,
+			'no-unused-vars': 'off',
+			'@typescript-eslint/no-unused-vars': 'off',
 			'arrow-spacing': ['warn', { before: true, after: true }],
 			'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
 			'comma-dangle': ['error', 'always-multiline'],
@@ -48,6 +69,13 @@ module.exports = [
 			'space-unary-ops': 'error',
 			'spaced-comment': 'error',
 			yoda: 'error',
+		},
+	},
+	{
+		files: ['src/commands/**/*.ts'],
+		rules: {
+			'no-unused-vars': 'off',
+			'@typescript-eslint/no-unused-vars': 'off',
 		},
 	},
 ];

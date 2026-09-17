@@ -4,7 +4,7 @@ import type { RESTPutAPIApplicationGuildCommandsResult } from 'discord-api-types
 import { Routes } from 'discord.js';
 import { fileURLToPath } from 'node:url';
 import type { SlashCommandBuilder } from 'discord.js';
-import LoadFiles from "./utility/loadFiles";
+import LoadFiles from './utility/loadFiles';
 
 const appId:string = process.env.APP_ID || '';
 const token:string = process.env.DISCORD_TOKEN || '';
@@ -17,7 +17,8 @@ for (const file of fileList2) {
 	const command = commandModule.default ?? commandModule;
 	if ('data' in command && 'execute' in command) {
 		commands.push(command.data.toJSON());
-	} else {
+	}
+	else {
 		console.log(`[WARNING] The command at ${file} is missing a required "data" or "execute" property.`);
 	}
 }
@@ -28,7 +29,8 @@ for (const file of fileList2) {
 		const rest = new REST({ version: '10' }).setToken(token);
 		const data = await rest.put(Routes.applicationCommands(appId), { body: commands }) as RESTPutAPIApplicationGuildCommandsResult;
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-	} catch (error) {
+	}
+	catch (error) {
 		console.error(error);
 	}
 })();
