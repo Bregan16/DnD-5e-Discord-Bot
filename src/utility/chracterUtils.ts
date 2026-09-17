@@ -15,5 +15,6 @@ export const getSkillModifier = (char: any, skillName: string) => {
 
 export const doSkillChek = (char: any, skillName: string, options?:any) => {
     const ability = getSkillModifier(char, skillName);
-    return roll(`1d20 + ${ability}`);
+    console.log('## options.buff', options.buff );
+    return roll(`1d20 + ${ability} ${options.buff}`);
 }

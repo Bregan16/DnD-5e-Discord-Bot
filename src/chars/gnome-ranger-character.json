@@ -27,8 +27,8 @@
         "modifier": 2
       },
       "intelligence": {
-        "baseScore": 10,
-        "modifier": 0
+        "baseScore": 12,
+        "modifier": 1
       },
       "wisdom": {
         "baseScore": 14,
