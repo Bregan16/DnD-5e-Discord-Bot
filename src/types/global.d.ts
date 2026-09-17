@@ -1,6 +1,14 @@
 import { Client, Collection } from 'discord.js';
 
 declare global {
+  type SkillEntry = {
+    name: string;
+    ability: string;
+    modifier: number;
+    isProficient: boolean;
+    note?: string;
+  };
+
   interface CharacterEntry {
     character: {
       basicInfo: {

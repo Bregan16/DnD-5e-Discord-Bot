@@ -1,7 +1,7 @@
 {
   "character": {
     "basicInfo": {
-        "discoredId": "sindbad9050",
+      "discoredId": "sindbad9050",
       "name": "Bregan",
       "class": "Ranger",
       "species": "Gnome",
@@ -185,7 +185,7 @@
           "name": "Religion",
           "ability": "Intelligence",
           "modifier": 0,
-          "isProficient": false
+          "isProficient": true
         },
         {
           "name": "Sleight of Hand",
