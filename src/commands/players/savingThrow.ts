@@ -23,15 +23,15 @@ export default {
 
 			const { firstChoice, secondChoice, thirdChoice } = await runThreeStepButtonPrompt(
 				interaction,
-				'Select the ability for your check!',
+				'Select the attribute for your saving throw!',
 				[actionFirstRow, actionSecondRow],
-				'Select a buff for your check!',
+				'Select a buff for your saving throw!',
 				[row1, row2, row3],
-				'Now choose Advantage/Disadvantage for your check!',
+				'Now choose Advantage/Disadvantage for your saving throw!',
 				[row4],
 			);
 
-			const selectedAbility = firstChoice.customId;
+			const selectedSavingThrow = firstChoice.customId;
 			const selectedBuff = secondChoice.customId;
 			const selectedMode = thirdChoice.customId;
 			const isDebuff = selectedBuff.startsWith('-');
@@ -48,11 +48,11 @@ export default {
 			}
 
 			const userName = interaction.user.username;
-			const abilityName = selectedAbility;
+			const abilityName = selectedSavingThrow;
 			const char = discordClient?.characters?.get(userName);
 			const rollResult = doSavingThrowCheck(char?.character, abilityName, rollOptions);
 
-			let content = '';
+			let content:string;
 			const difficultyClass = getDifficultyClass(rollResult.total);
 			if (selectedBuff === 'noBuff') {
 				content = `${userName}, did a **${abilityName}** saving throw without a buff ${selectedMode !== 'non' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
