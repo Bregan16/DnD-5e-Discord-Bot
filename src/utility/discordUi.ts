@@ -10,9 +10,9 @@ import {
 import { ABILITIES_LIST } from './const';
 
 export const createBuffRows = (): {
-    row1: ActionRowBuilder<ButtonBuilder>;
-    row2: ActionRowBuilder<ButtonBuilder>;
-    row3: ActionRowBuilder<ButtonBuilder>;
+	buffRow: ActionRowBuilder<ButtonBuilder>;
+	deBuffRow: ActionRowBuilder<ButtonBuilder>;
+    noBuffRow: ActionRowBuilder<ButtonBuilder>;
 } => {
 	const buff1d4 = new ButtonBuilder().setCustomId('+ 1d4').setLabel('+ 1d4').setStyle(ButtonStyle.Success);
 	const buff1 = new ButtonBuilder().setCustomId('+ 1').setLabel('+ 1').setStyle(ButtonStyle.Success);
@@ -28,11 +28,11 @@ export const createBuffRows = (): {
 
 	const noBuff = new ButtonBuilder().setCustomId('noBuff').setLabel('No Buff').setStyle(ButtonStyle.Secondary);
 
-	const row1 = new ActionRowBuilder<ButtonBuilder>().addComponents(buff1d4, buff1, buff2, buff3, buff4);
-	const row2 = new ActionRowBuilder<ButtonBuilder>().addComponents(deBuff1d4, deBuff1, deBuff2, deBuff3, deBuff4);
-	const row3 = new ActionRowBuilder<ButtonBuilder>().addComponents(noBuff);
+	const buffRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buff1d4, buff1, buff2, buff3, buff4);
+	const deBuffRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deBuff1d4, deBuff1, deBuff2, deBuff3, deBuff4);
+	const noBuffRow = new ActionRowBuilder<ButtonBuilder>().addComponents(noBuff);
 
-	return { row1, row2, row3 };
+	return { buffRow, deBuffRow, noBuffRow };
 };
 
 export const createAdvantageRow = (): ActionRowBuilder<ButtonBuilder> => {
@@ -150,11 +150,11 @@ export const getBuffUIElements = async (
 	name: string,
 	interaction: ChatInputCommandInteraction,
 ): Promise<Message<boolean>> => {
-	const { row1, row2, row3 } = createBuffRows();
+	const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
 
 	const response = await interaction.reply({
 		content: `Select a buff for your "${name}" check!`,
-		components: [row1, row2, row3],
+		components: [buffRow, deBuffRow, noBuffRow],
 		withResponse: true,
 	});
 	const message = response.resource?.message;

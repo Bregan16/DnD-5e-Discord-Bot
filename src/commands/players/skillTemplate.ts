@@ -12,15 +12,15 @@ export default {
 		discordClient: DiscordClient,
 	) => {
 		try {
-			const { row1, row2, row3 } = createBuffRows();
-			const row4 = createAdvantageRow();
+			const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
+			const advantageRow = createAdvantageRow();
 
 			const { firstChoice, secondChoice } = await runTwoStepButtonPrompt(
 				interaction,
 				'Select a buff for your check!',
-				[row1, row2, row3],
+				[buffRow, deBuffRow, noBuffRow],
 				'Now choose Advantage/Disadvantage for your check!',
-				[row4],
+				[advantageRow],
 			);
 
 			const selectedBuff = firstChoice.customId;

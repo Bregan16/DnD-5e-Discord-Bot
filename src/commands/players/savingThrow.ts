@@ -18,17 +18,17 @@ export default {
 	) => {
 		try {
 			const { actionFirstRow, actionSecondRow } = createAbilityRow();
-			const { row1, row2, row3 } = createBuffRows();
-			const row4 = createAdvantageRow();
+			const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
+			const advantageRow = createAdvantageRow();
 
 			const { firstChoice, secondChoice, thirdChoice } = await runThreeStepButtonPrompt(
 				interaction,
 				'Select the attribute for your saving throw!',
 				[actionFirstRow, actionSecondRow],
 				'Select a buff for your saving throw!',
-				[row1, row2, row3],
+				[buffRow, deBuffRow, noBuffRow],
 				'Now choose Advantage/Disadvantage for your saving throw!',
-				[row4],
+				[advantageRow],
 			);
 
 			const selectedSavingThrow = firstChoice.customId;
