@@ -63,34 +63,28 @@
       "savingThrows": [
         {
           "ability": "Strength",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "ability": "Dexterity",
-          "modifier": 5,
           "isProficient": true,
           "note": "Proficient"
         },
         {
           "ability": "Constitution",
-          "modifier": 2,
           "isProficient": false
         },
         {
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "ability": "Wisdom",
-          "modifier": 4,
           "isProficient": true,
           "note": "Proficient"
         },
         {
           "ability": "Charisma",
-          "modifier": -1,
           "isProficient": false
         }
       ],
@@ -98,112 +92,94 @@
         {
           "name": "Acrobatics",
           "ability": "Dexterity",
-          "modifier": 3,
           "isProficient": false
         },
         {
           "name": "Animal Handling",
           "ability": "Wisdom",
-          "modifier": 4,
           "isProficient": true,
           "note": "Proficient"
         },
         {
           "name": "Arcana",
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "name": "Athletics",
           "ability": "Strength",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "name": "Deception",
           "ability": "Charisma",
-          "modifier": -1,
           "isProficient": false
         },
         {
           "name": "History",
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "name": "Insight",
           "ability": "Wisdom",
-          "modifier": 2,
           "isProficient": false
         },
         {
           "name": "Intimidation",
           "ability": "Charisma",
-          "modifier": -1,
           "isProficient": false
         },
         {
           "name": "Investigation",
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "name": "Medicine",
           "ability": "Wisdom",
-          "modifier": 2,
           "isProficient": false
         },
         {
           "name": "Nature",
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": false
         },
         {
           "name": "Perception",
           "ability": "Wisdom",
-          "modifier": 4,
           "isProficient": true,
           "note": "Proficient"
         },
         {
           "name": "Performance",
           "ability": "Charisma",
-          "modifier": -1,
           "isProficient": false
         },
         {
           "name": "Persuasion",
           "ability": "Charisma",
-          "modifier": -1,
           "isProficient": false
         },
         {
           "name": "Religion",
           "ability": "Intelligence",
-          "modifier": 0,
           "isProficient": true
         },
         {
           "name": "Sleight of Hand",
           "ability": "Dexterity",
-          "modifier": 3,
           "isProficient": false
         },
         {
           "name": "Stealth",
           "ability": "Dexterity",
-          "modifier": 5,
           "isProficient": true,
           "note": "Proficient"
         },
         {
           "name": "Survival",
           "ability": "Wisdom",
-          "modifier": 4,
           "isProficient": true,
           "note": "Proficient"
         }

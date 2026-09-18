@@ -116,6 +116,11 @@ declare global {
     };
   }
 
+  type SkillRollOptions = {
+    buff?: string;
+    advantage?: 'advantage' | 'disadvantage';
+  };
+
   type DiscordCommand = {
     data: { name: string };
     execute: (interaction: import('discord.js').ChatInputCommandInteraction, discordClient: DiscordClient) => Promise<void>;

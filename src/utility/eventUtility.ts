@@ -9,9 +9,10 @@ export default async function EventUtility(discordClient: DiscordClient) {
 	});
 
 	discordClient.on(Events.InteractionCreate, async (interaction) => {
+		console.log('## interaction',  interaction);
 		if (!interaction.isChatInputCommand()) return;
     	const command = discordClient.commands.get(interaction.commandName);
-
+console.log('## ', discordClient.commands );
     	if (!command) {
     		console.error(`No command matching ${interaction.commandName} was found.`);
     		return;

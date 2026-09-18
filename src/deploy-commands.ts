@@ -3,27 +3,34 @@ import { REST } from '@discordjs/rest';
 import type { RESTPutAPIApplicationGuildCommandsResult } from 'discord-api-types/v10';
 import { Routes } from 'discord.js';
 import { fileURLToPath } from 'node:url';
-import type { SlashCommandBuilder } from 'discord.js';
 import LoadFiles from './utility/loadFiles';
+import { SlashCommandBuilder } from 'discord.js';
 
 const appId:string = process.env.APP_ID || '';
 const token:string = process.env.DISCORD_TOKEN || '';
 
 const rootPath = fileURLToPath(import.meta.url);
 const fileList2 = await LoadFiles(rootPath, 'commands');
-const commands: ReturnType<SlashCommandBuilder['toJSON']>[] = [];
+const commands: any[] = [];
 for (const file of fileList2) {
 	const commandModule = await import(file);
 	const command = commandModule.default ?? commandModule;
-	if ('data' in command && 'execute' in command) {
-		commands.push(command.data.toJSON());
-	}
-	else {
-		console.log(`[WARNING] The command at ${file} is missing a required "data" or "execute" property.`);
+	if(command.data.name !== 'skillTemplate') {
+		if ('data' in command && 'execute' in command) {
+			console.log('## ', command.data.name );
+			commands.push(command.data.toJSON());
+		} else {
+			console.log(`[WARNING] The command at ${file} is missing a required "data" or "execute" property.`);
+		}
 	}
 }
 
 (async () => {
+	const skillList = ['religion', 'persuasion', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'sleight_of_hand', 'stealth', 'survival'];
+	for (const skill of skillList) {
+		console.log('##   ', skill );
+		commands.push(new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON());
+	}
 	try {
 		console.log(`Started refreshing ${commands.length} ${token} application (/) commands.`);
 		const rest = new REST({ version: '10' }).setToken(token);

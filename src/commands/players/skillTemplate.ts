@@ -2,15 +2,15 @@ import {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
 } from 'discord.js';
-import { doSkillCheck, getDifficultyClass } from '../../../utility/chracterUtils';
-import { createAdvantageRow, createBuffRows, runTwoStepButtonPrompt } from '../../../utility/discordUi';
+import { doSkillCheck, getDifficultyClass } from '../../utility/chracterUtils';
+import { createAdvantageRow, createBuffRows, runTwoStepButtonPrompt } from '../../utility/discordUi';
 
 export default {
-	data: new SlashCommandBuilder().setName('religion').setDescription('Do a Religion check!'),
-	async execute(
+	data: new SlashCommandBuilder().setName('skilltemplate').setDescription('Do a skillTemplate check!'),
+	execute: async (
 		interaction: ChatInputCommandInteraction,
 		discordClient: DiscordClient,
-	) {
+	) => {
 		try {
 			const { row1, row2, row3 } = createBuffRows();
 			const row4 = createAdvantageRow();
@@ -26,10 +26,7 @@ export default {
 			const selectedBuff = firstChoice.customId;
 			const selectedMode = secondChoice.customId;
 			const isDebuff = selectedBuff.startsWith('-');
-			const rollOptions: {
-				buff?: string;
-				advantage?: 'advantage' | 'disadvantage';
-			} = {
+			const rollOptions: SkillRollOptions = {
 				buff: '',
 			};
 
@@ -49,10 +46,10 @@ export default {
 			let content = '';
 			const difficultyClass = getDifficultyClass(rollResult.total);
 			if (selectedBuff === 'noBuff') {
-				content = `${userName}, did a ${skillName} check without a buff ${selectedMode !== 'non' ? 'and with ' + selectedMode : ''}, the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a ${skillName} check without a buff ${selectedMode !== 'non' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
 			else {
-				content = `${userName}, did a ${skillName} check with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'non' ? 'and ' + selectedMode : ''}, the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a ${skillName} check with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'non' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
 			await secondChoice.update({
 				content,
