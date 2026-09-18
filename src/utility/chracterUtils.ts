@@ -1,36 +1,72 @@
 import { roll } from 'roll-parser';
 
+export const getProficiencyBonus = (
+	char: CharacterEntry['character'] | undefined,
+): number => {
+	return char?.combatStats?.proficiencyBonus ?? 0;
+};
+
+export const getAbilityEntry = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+): AbilityEntry | undefined => {
+	const abilityScores = char?.abilityScores as Record<string, AbilityEntry | undefined> | undefined;
+	return abilityScores?.[abilityName.toLocaleLowerCase()];
+};
+
+export const getAbilityModifier = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+): number | undefined => {
+	return getAbilityEntry(char, abilityName)?.modifier;
+};
+
+export const getSavingThrowEntry = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+): SavingThrowEntry | undefined => {
+	return char?.proficiencies?.savingThrows?.find(
+		(savingThrow: SavingThrowEntry) => savingThrow.ability.toLocaleLowerCase() === abilityName.toLocaleLowerCase(),
+	);
+};
+
+export const hasSavingThrowProficiency = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+): boolean => {
+	return getSavingThrowEntry(char, abilityName)?.isProficient ?? false;
+};
+
 export const getSkillEntry = (
-	character: CharacterEntry['character'] | undefined,
+	char: CharacterEntry['character'] | undefined,
 	skillName: string,
 ): SkillEntry | undefined => {
-	return character?.proficiencies?.skills?.find(
+	return char?.proficiencies?.skills?.find(
 		(skill: SkillEntry) => skill.name.toLocaleLowerCase() === skillName.toLocaleLowerCase(),
 	);
 };
 
-export const getAbilityScoresEntry = (
-	character: CharacterEntry['character'] | undefined,
-	abilityName: string,
-): number | undefined => {
-	const abilityScores = character?.abilityScores as Record<string, { modifier: number } | undefined> | undefined;
-	return abilityScores?.[abilityName.toLocaleLowerCase()]?.modifier;
+export const getSkillAbility = (
+	char: CharacterEntry['character'] | undefined,
+	skillName: string,
+): string => {
+	return getSkillEntry(char, skillName)?.ability || '';
 };
 
 export const getSkillModifier = (
 	char: CharacterEntry['character'] | undefined,
 	skillName: string,
 ): number => {
-	const skillAbility = getSkillEntry(char, skillName)?.ability;
-	return skillAbility ? getAbilityScoresEntry(char, skillAbility) ?? 0 : 0;
+	const skillAbility:string = getSkillAbility(char, skillName);
+	return getAbilityModifier(char, skillAbility) ?? 0;
 };
 
-export const getSkillProficiency = (
+export const hasSkillProficiency = (
 	char: CharacterEntry['character'] | undefined,
 	skillName: string,
-): number => {
+): boolean => {
 	// Math.floor((Level - 1) / 4) + 2
-	return getSkillEntry(char, skillName)?.isProficient ? 1 : 0;
+	return getSkillEntry(char, skillName)?.isProficient ?? false;
 };
 
 export const getDifficultyClass = (result: number): string => {
@@ -52,17 +88,53 @@ export const doSkillCheck = (
 		buff?: string;
 		advantage?: 'advantage' | 'disadvantage';
 	},
-) => {
-	const ability = getSkillModifier(char, skillName);
-	const isProficient = getSkillProficiency(char, skillName);
-	const proficiencyBonus = isProficient ? char?.combatStats?.proficiencyBonus ?? 0 : 0;
+) : ReturnType<typeof roll> => {
+	const abilityModifier:number = getSkillModifier(char, skillName);
+	const isProficient:boolean = hasSkillProficiency(char, skillName);
+	const proficiencyBonus:number = isProficient ? getProficiencyBonus(char) : 0;
+
 	console.log('## skillName, ability, proficiencyBonus, options');
-	console.log('##', skillName, ability, proficiencyBonus, options);
+	console.log('##', skillName, abilityModifier, proficiencyBonus, options);
 	if (options?.advantage === 'advantage') {
-		return roll(`2d20kh1 + ${ability} + ${proficiencyBonus} ${options.buff ?? ''}`);
+		return roll(`2d20kh1 + ${abilityModifier} + ${proficiencyBonus} ${options.buff ?? ''}`);
 	}
 	if (options?.advantage === 'disadvantage') {
-		return roll(`2d20kl1 + ${ability} + ${proficiencyBonus} ${options.buff ?? ''}`);
+		return roll(`2d20kl1 + ${abilityModifier} + ${proficiencyBonus} ${options.buff ?? ''}`);
 	}
-	return roll(`1d20 + ${ability} + ${proficiencyBonus} ${options?.buff ?? ''}`);
+	return roll(`1d20 + ${abilityModifier} + ${proficiencyBonus} ${options?.buff ?? ''}`);
+};
+
+export const doSavingThrowCheck = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+	options?: {
+		buff?: string;
+		advantage?: 'advantage' | 'disadvantage';
+	},
+) : ReturnType<typeof roll> => {
+	const isProficient = hasSavingThrowProficiency(char, abilityName);
+	const proficiencyBonus = isProficient ? getProficiencyBonus(char) : 0;
+	return doAbilityCheck(char, abilityName, options, proficiencyBonus);
+}
+
+export const doAbilityCheck = (
+	char: CharacterEntry['character'] | undefined,
+	abilityName: string,
+	options?: {
+		buff?: string;
+		advantage?: 'advantage' | 'disadvantage';
+	},
+	proficiencyBonus: number = 0
+) : ReturnType<typeof roll> => {
+	const ability = getAbilityEntry(char, abilityName);
+
+	console.log('## abilityName, ability, proficiencyBonus, options');
+	console.log('##', abilityName, ability?.modifier, proficiencyBonus, options);
+	if (options?.advantage === 'advantage') {
+		return roll(`2d20kh1 + ${ability?.modifier ?? 0} + ${proficiencyBonus} ${options.buff ?? ''}`);
+	}
+	if (options?.advantage === 'disadvantage') {
+		return roll(`2d20kl1 + ${ability?.modifier ?? 0} + ${proficiencyBonus} ${options.buff ?? ''}`);
+	}
+	return roll(`1d20 + ${ability?.modifier ?? 0} + ${proficiencyBonus} ${options?.buff ?? ''}`);
 };

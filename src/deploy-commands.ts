@@ -5,6 +5,7 @@ import { Routes } from 'discord.js';
 import { fileURLToPath } from 'node:url';
 import LoadFiles from './utility/loadFiles';
 import { SlashCommandBuilder } from 'discord.js';
+import { SKILL_LIST } from './utility/const';
 
 const appId:string = process.env.APP_ID || '';
 const token:string = process.env.DISCORD_TOKEN || '';
@@ -15,7 +16,7 @@ const commands: any[] = [];
 for (const file of fileList2) {
 	const commandModule = await import(file);
 	const command = commandModule.default ?? commandModule;
-	if(command.data.name !== 'skillTemplate') {
+	if(command.data.name !== 'skilltemplate') {
 		if ('data' in command && 'execute' in command) {
 			console.log('## ', command.data.name );
 			commands.push(command.data.toJSON());
@@ -26,10 +27,9 @@ for (const file of fileList2) {
 }
 
 (async () => {
-	const skillList = ['religion', 'persuasion', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'sleight_of_hand', 'stealth', 'survival'];
-	for (const skill of skillList) {
+		for (const skill of SKILL_LIST) {
 		console.log('##   ', skill );
-		commands.push(new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON());
+		commands.push(new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check.`).toJSON());
 	}
 	try {
 		console.log(`Started refreshing ${commands.length} ${token} application (/) commands.`);

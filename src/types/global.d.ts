@@ -9,6 +9,20 @@ declare global {
     note?: string;
   };
 
+  type SavingThrowEntry = {
+    ability: string;
+    isProficient: boolean;
+    note?: string;
+  };
+
+  type AbilityEntry = {
+    baseScore: number;
+    modifier: number;
+    speciesBonus?: number;
+    totalScore?: number;
+    isProficient?: boolean;
+  };
+
   interface CharacterEntry {
     character: {
       basicInfo: {
@@ -23,12 +37,12 @@ declare global {
         background: string;
       };
       abilityScores: {
-        strength: { baseScore: number; modifier: number };
-        dexterity: { baseScore: number; speciesBonus?: number; totalScore?: number; modifier: number };
-        constitution: { baseScore: number; modifier: number };
-        intelligence: { baseScore: number; modifier: number };
-        wisdom: { baseScore: number; speciesBonus?: number; totalScore?: number; modifier: number };
-        charisma: { baseScore: number; modifier: number };
+        strength: AbilityEntry;
+        dexterity: AbilityEntry;
+        constitution: AbilityEntry;
+        intelligence: AbilityEntry;
+        wisdom: AbilityEntry;
+        charisma: AbilityEntry;
       };
       hitPoints: {
         hitDice: string;

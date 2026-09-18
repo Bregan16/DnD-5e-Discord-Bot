@@ -2,6 +2,7 @@ import {
 	Collection, SlashCommandBuilder,
 } from 'discord.js';
 import LoadFiles from './loadFiles';
+import { SKILL_LIST } from './const';
 
 export default async function CommandLoader(discordClient: DiscordClient, rootPath: string) {
 	const fileList = await LoadFiles(rootPath, 'commands');
@@ -22,8 +23,8 @@ export default async function CommandLoader(discordClient: DiscordClient, rootPa
 			}
 		}
 	}
-	const skillList = ['religion', 'persuasion', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'sleight_of_hand', 'stealth', 'survival'];
-	for (const skill of skillList) {
+
+	for (const skill of SKILL_LIST) {
 		const copy = JSON.parse(JSON.stringify(test));
 		copy.data = new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON();
 		copy.execute = test?.execute;

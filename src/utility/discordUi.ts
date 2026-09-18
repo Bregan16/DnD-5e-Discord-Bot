@@ -7,6 +7,7 @@ import {
 	ComponentType,
 	Message,
 } from 'discord.js';
+import { ABILITIES_LIST } from './const';
 
 export const createBuffRows = (): {
     row1: ActionRowBuilder<ButtonBuilder>;
@@ -42,6 +43,20 @@ export const createAdvantageRow = (): ActionRowBuilder<ButtonBuilder> => {
 	return new ActionRowBuilder<ButtonBuilder>().addComponents(noAdvantage, buffAdvantage, buffDisAdvantage);
 };
 
+export const createAbilityRow = (): { actionFirstRow: ActionRowBuilder<ButtonBuilder>; actionSecondRow: ActionRowBuilder<ButtonBuilder> } => {
+	const actionFirstRow = new ActionRowBuilder<ButtonBuilder>();
+	const actionSecondRow = new ActionRowBuilder<ButtonBuilder>();
+	ABILITIES_LIST.forEach((ability, index) => {
+		const buffAbility = new ButtonBuilder().setCustomId(ability).setLabel(ability).setStyle(ButtonStyle.Success);
+		if (index < 3) {
+			actionFirstRow.addComponents(buffAbility);
+		} else {
+			actionSecondRow.addComponents(buffAbility);
+		}
+	});
+	return { actionFirstRow, actionSecondRow };
+};
+
 export const runTwoStepButtonPrompt = async (
 	interaction: ChatInputCommandInteraction,
 	firstPrompt: string,
@@ -50,11 +65,15 @@ export const runTwoStepButtonPrompt = async (
 	secondComponents: ActionRowBuilder<ButtonBuilder>[],
 ): Promise<{ firstChoice: ButtonInteraction; secondChoice: ButtonInteraction }> => {
 	const collectorFilter = (i: { user: { id: string } }) => i.user.id === interaction.user.id;
-	const initialMessage = await interaction.reply({
+	const initialResponse = await interaction.reply({
 		content: firstPrompt,
 		components: firstComponents,
-		fetchReply: true,
+		withResponse: true,
 	});
+	const initialMessage = initialResponse.resource?.message;
+	if (!initialMessage) {
+		throw new Error('Initial interaction response message was not created');
+	}
 
 	const firstChoice = await initialMessage.awaitMessageComponent({
 		filter: collectorFilter,
@@ -76,17 +95,74 @@ export const runTwoStepButtonPrompt = async (
 	return { firstChoice, secondChoice };
 };
 
+export const runThreeStepButtonPrompt = async (
+	interaction: ChatInputCommandInteraction,
+	firstPrompt: string,
+	firstComponents: ActionRowBuilder<ButtonBuilder>[],
+	secondPrompt: string,
+	secondComponents: ActionRowBuilder<ButtonBuilder>[],
+	thirdPrompt: string,
+	thirdComponents: ActionRowBuilder<ButtonBuilder>[],
+): Promise<{ firstChoice: ButtonInteraction; secondChoice: ButtonInteraction; thirdChoice: ButtonInteraction }> => {
+	const collectorFilter = (i: { user: { id: string } }) => i.user.id === interaction.user.id;
+	const initialResponse = await interaction.reply({
+		content: firstPrompt,
+		components: firstComponents,
+		withResponse: true,
+	});
+	const initialMessage = initialResponse.resource?.message;
+	if (!initialMessage) {
+		throw new Error('Initial interaction response message was not created');
+	}
+
+	const firstChoice = await initialMessage.awaitMessageComponent({
+		filter: collectorFilter,
+		time: 60_000,
+		componentType: ComponentType.Button,
+	});
+
+	await firstChoice.update({
+		content: secondPrompt,
+		components: secondComponents,
+	});
+
+	const secondChoice = await firstChoice.message.awaitMessageComponent({
+		filter: collectorFilter,
+		time: 60_000,
+		componentType: ComponentType.Button,
+	});
+
+	await secondChoice.update({
+		content: thirdPrompt,
+		components: thirdComponents,
+	});
+
+	const thirdChoice = await secondChoice.message.awaitMessageComponent({
+		filter: collectorFilter,
+		time: 60_000,
+		componentType: ComponentType.Button,
+	});
+
+	return { firstChoice, secondChoice, thirdChoice };
+};
+
 export const getBuffUIElements = async (
 	name: string,
 	interaction: ChatInputCommandInteraction,
 ): Promise<Message<boolean>> => {
 	const { row1, row2, row3 } = createBuffRows();
 
-	return await interaction.reply({
+	const response = await interaction.reply({
 		content: `Select a buff for your "${name}" check!`,
 		components: [row1, row2, row3],
-		fetchReply: true,
+		withResponse: true,
 	});
+	const message = response.resource?.message;
+	if (!message) {
+		throw new Error('Buff interaction response message was not created');
+	}
+
+	return message;
 };
 
 export const getAdvantageUIElements = async (
@@ -95,10 +171,15 @@ export const getAdvantageUIElements = async (
 ): Promise<Message<boolean>> => {
 	const row = createAdvantageRow();
 
-	return await interaction.reply({
+	const response = await interaction.reply({
 		content: `Now choose Advantage/Disadvantage for your "${name}" check!`,
 		components: [row],
-		fetchReply: true,
+		withResponse: true,
 	});
-};
+	const message = response.resource?.message;
+	if (!message) {
+		throw new Error('Advantage interaction response message was not created');
+	}
 
+	return message;
+};
