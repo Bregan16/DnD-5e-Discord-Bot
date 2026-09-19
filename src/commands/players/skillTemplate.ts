@@ -1,6 +1,7 @@
 import {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
+	MessageFlags,
 } from 'discord.js';
 import { doSkillCheck, getDifficultyClass } from '../../utility/chracterUtils';
 import { createAdvantageRow, createBuffRows, runTwoStepButtonPrompt } from '../../utility/discordUi';
@@ -51,7 +52,7 @@ export default {
 			else {
 				content = `${userName}, did a **${skillName}** check with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'non' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
-			await secondChoice.update({
+			await secondChoice.reply({
 				content,
 				components: [],
 			});

@@ -6,6 +6,7 @@ import {
 	ChatInputCommandInteraction,
 	ComponentType,
 	Message,
+	MessageFlags,
 } from 'discord.js';
 import { ABILITIES_LIST } from './const';
 
@@ -69,6 +70,7 @@ export const runTwoStepButtonPrompt = async (
 		content: firstPrompt,
 		components: firstComponents,
 		withResponse: true,
+		flags: MessageFlags.Ephemeral
 	});
 	const initialMessage = initialResponse.resource?.message;
 	if (!initialMessage) {
