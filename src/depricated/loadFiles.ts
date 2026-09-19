@@ -10,7 +10,7 @@ export default async function LoadFiles(rootPath: string, startFolders: string) 
 	const foldersPath = path.join(__dirname, startFolders);
 	const commandFolders = fs.readdirSync(foldersPath, { withFileTypes: true });
 	for (const item of commandFolders) {
-		if (item.isFile()) {
+		if (item.isFile() && !item.name.startsWith('index')) {
 			fileList.push(pathToFileURL(path.join(item.parentPath, item.name)).href);
 		}
 		if (item.isDirectory()) {

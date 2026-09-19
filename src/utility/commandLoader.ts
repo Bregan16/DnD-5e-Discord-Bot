@@ -1,33 +1,31 @@
 import {
 	Collection, SlashCommandBuilder,
 } from 'discord.js';
-import LoadFiles from './loadFiles';
 import { SKILL_LIST } from './const';
+import { allCommands } from "../commands";
 
-export default async function CommandLoader(discordClient: DiscordClient, rootPath: string) {
-	const fileList = await LoadFiles(rootPath, 'commands');
-
+export default async function CommandLoader(discordClient: DiscordClient) {
 	discordClient.commands = new Collection();
-	let test: any = null;
-	for (const file of fileList) {
-		const commandModule = await import(file);
-		const command = commandModule.default ?? commandModule;
-		if(test === null && command.data.name === 'skilltemplate') {
-			test = command;
+	for (const command of allCommands.common) {
+		const commandName = command.data.name;
+		if ('data' in command && 'execute' in command) {
+			discordClient.commands.set(commandName, command);
+			console.log('## ', commandName );
 		} else {
-			if ('data' in command && 'execute' in command) {
-				discordClient.commands.set(command.data.name, command);
-			}
-			else {
-				console.log(`[WARNING] The command at ${file} is missing a required "data" or "execute" property.`);
-			}
+			console.log(`[WARNING] The command at ${commandName} is missing a required "data" or "execute" property.`);
 		}
 	}
-
-	for (const skill of SKILL_LIST) {
-		const copy = JSON.parse(JSON.stringify(test));
-		copy.data = new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON();
-		copy.execute = test?.execute;
-		discordClient.commands.set(skill, copy);
+	for (const specialCommand of allCommands.special) {
+		const commandName = specialCommand.data.name;
+		console.log('## ', commandName );
+		if(commandName === 'skilltemplate') {
+			for (const skill of SKILL_LIST) {
+				const copy = JSON.parse(JSON.stringify(specialCommand));
+				copy.data = new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON();
+				copy.execute = specialCommand?.execute;
+				discordClient.commands.set(skill, copy);
+				console.log('##  -', skill );
+			}
+		}
 	}
 }

@@ -12,7 +12,7 @@ const discordClient = new Client({
 }) as DiscordClient;
 
 const rootPath = fileURLToPath(import.meta.url);
-await CommandLoader(discordClient, rootPath);
+await CommandLoader(discordClient);
 await CharacterManager(discordClient, rootPath);
 await EventUtility(discordClient);
 
