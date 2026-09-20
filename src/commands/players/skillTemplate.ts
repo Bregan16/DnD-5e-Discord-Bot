@@ -1,7 +1,6 @@
 import {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
-	MessageFlags,
 } from 'discord.js';
 import { doSkillCheck, getDifficultyClass } from '../../utility/chracterUtils';
 import { createAdvantageRow, createBuffRows, runTwoStepButtonPrompt } from '../../utility/discordUi';
