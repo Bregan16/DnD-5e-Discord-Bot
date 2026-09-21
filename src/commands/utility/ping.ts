@@ -11,66 +11,122 @@ export default {
 		discordClient: DiscordClient,
 	) {
 		// await interaction.reply('Pong!');
-		const modal = new ModalBuilder().setCustomId('myModal').setTitle('My Modal');
+		const modal = new ModalBuilder().setCustomId('myModal').setTitle('Select your modifiers');
 
-		const hobbiesInput = new TextInputBuilder()
-			.setCustomId('hobbiesInput')
-			// Short means a single line of text.
-			.setStyle(TextInputStyle.Short)
-			// Placeholder text displayed inside the text input box
-			.setPlaceholder('card games, films, books, etc.');
-
-		const hobbiesLabel = new LabelBuilder()
-			// The label is a large header text that identifies the interactive component for the user.
-			.setLabel('What are some of your favorite hobbies?')
-			// The description is an additional optional subtext that aids the label.
-			.setDescription('Activities you like to participate in')
-			// Set text input as the component of the label
-			.setTextInputComponent(hobbiesInput);
-
-		const input = new TextInputBuilder()
-			// Set the component id (this is not the custom id)
-			.setId(1)
-			// Set the maximum number of characters allowed
-			.setMaxLength(1_000)
-			// Set the minimum number of characters required for submission
-			.setMinLength(10)
-			// Set a default value to prefill the text input
-			.setValue('Default')
-			// Require a value in this text input field (defaults to true)
-			.setRequired(true);
-		const favoriteStarterSelect = new StringSelectMenuBuilder()
-			.setCustomId('starter')
-			.setPlaceholder('Make a selection!')
-			// Modal only property on select menus to prevent submission, defaults to true
-			.setRequired(true)
+		const bonusMalus = new StringSelectMenuBuilder()
+			.setCustomId('bonusMalus')
+			.setPlaceholder('No flat bonus or malus')
+			.setRequired(false)
 			.addOptions(
-				// String select menu options
 				new StringSelectMenuOptionBuilder()
-					// Label displayed to user
-					.setLabel('Bulbasaur')
-					// Description of option
-					.setDescription('The dual-type Grass/Poison Seed Pokémon.')
-					// Value returned to you in modal submission
-					.setValue('bulbasaur'),
+					.setLabel('+1')
+					.setValue('+1'),
 				new StringSelectMenuOptionBuilder()
-					.setLabel('Charmander')
-					.setDescription('The Fire-type Lizard Pokémon.')
-					.setValue('charmander'),
+					.setLabel('+2')
+					.setValue('+2'),
 				new StringSelectMenuOptionBuilder()
-					.setLabel('Squirtle')
-					.setDescription('The Water-type Tiny Turtle Pokémon.')
-					.setValue('squirtle'),
+					.setLabel('+3')
+					.setValue('+3'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+4')
+					.setValue('+4'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+5')
+					.setValue('+5'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1')
+					.setValue('-1'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-2')
+					.setValue('-2'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-3')
+					.setValue('-3'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-4')
+					.setValue('-4'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-5')
+					.setValue('-5'),
 			);
-		const favoriteStarterLabel = new LabelBuilder()
-			.setLabel('Whats your favorite Gen 1 Pokémon starter?')
-			// Set string select menu as component of the label
-			.setStringSelectMenuComponent(favoriteStarterSelect);
+
+		const bonusMalus2 = new StringSelectMenuBuilder()
+			.setCustomId('bonusMalus2')
+			.setPlaceholder('No dice bonus or malus')
+			.setRequired(false)
+			.addOptions(
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+1d4')
+					.setValue('+1d4'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+1d6')
+					.setValue('+1d6'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+1d8')
+					.setValue('+1d8'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+1d10')
+					.setValue('+1d10'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('+1d12')
+					.setValue('+1d12'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1d4')
+					.setValue('-1d4'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1d6')
+					.setValue('-1d6'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1d8')
+					.setValue('-1d8'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1d10')
+					.setValue('-1d10'),
+				new StringSelectMenuOptionBuilder()
+					.setLabel('-1d12')
+					.setValue('-1d12'),
+			);
+
+		const bonusMalusSelect = new LabelBuilder()
+			.setLabel('Select a flat bonus or malus')
+			.setStringSelectMenuComponent(bonusMalus);
+
+		const bonusMalusSelect2 = new LabelBuilder()
+			.setLabel('Select a dice bonus or malus')
+			.setStringSelectMenuComponent(bonusMalus2);
+
+		const diceBonusMalus = new LabelBuilder()
+			.setLabel('Select a dice bonus/malus')
+			.setRadioGroupComponent((radioGroup) =>
+			radioGroup.setCustomId('diceBonusMalus').addOptions([
+				{ label: '+ 1d4', value: '+1d4'},
+				{ label: '- 1d4', value: '-1d4'},
+				{ label: '+ 1d6', value: '+1d6'},
+				{ label: '- 1d6', value: '-1d6'},
+				{ label: '+ 1d8', value: '+1d8'},
+				{ label: '- 1d8', value: '-1d8'},
+				{ label: '+ 1d10', value: '+1d10'},
+				{ label: '- 1d10', value: '-1d10'},
+				{ label: '+ 1d12', value: '+1d12'},
+				{ label: '- 1d12', value: '-1d12'},
+			]).setRequired(false),
+		);
+
+		const advantageDisadvantage = new LabelBuilder()
+			.setLabel('Select Advantage/Disadvantage')
+			.setRadioGroupComponent((radioGroup) =>
+			radioGroup.setCustomId('advantageDisadvantage').addOptions([
+				{ label: 'no', value: 'no', default: true},
+				{ label: 'Advantage', value: 'advantage'},
+				{ label: 'Disadvantage', value: 'disadvantage'},
+			])
+		);
 		const text = new TextDisplayBuilder().setContent(
 			'Text that could not fit in to a label or description\n-# Markdown can also be used',
 		);
-		modal.addLabelComponents(hobbiesLabel, favoriteStarterLabel)
-			.addTextDisplayComponents(text);
+
+		modal.addLabelComponents(bonusMalusSelect, bonusMalusSelect2, advantageDisadvantage);
+
 		// Show modal to the user
 		await interaction.showModal(modal);
 	},
