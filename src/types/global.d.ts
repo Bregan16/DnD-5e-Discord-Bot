@@ -1,4 +1,4 @@
-import { Client, Collection } from 'discord.js';
+import {Client, Collection, ModalSubmitInteraction} from 'discord.js';
 
 declare global {
   type SkillEntry = {
@@ -132,12 +132,13 @@ declare global {
 
   type SkillRollOptions = {
     buff?: string;
-    advantage?: 'advantage' | 'disadvantage';
+    advantage?: 'advantage' | 'disadvantage' | '';
   };
 
   type DiscordCommand = {
     data: { name: string };
     execute: (interaction: import('discord.js').ChatInputCommandInteraction, discordClient: DiscordClient) => Promise<void>;
+    responds: (interaction: import('discord.js').ModalSubmitInteraction, discordClient: DiscordClient) => Promise<void>;
   };
 
   type DiscordClient = Client<boolean> & {
