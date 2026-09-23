@@ -28,8 +28,8 @@ export default {
 		console.log('## firstChoice', interaction.commandName, firstChoice.customId );
 		const skillName = interaction.commandName;
 		const modal = await getBuffModal(`splitt_command_${skillName}_${firstChoice.customId}`);
-
 		await firstChoice.showModal(modal);
+		await interaction.deleteReply();
 	},
 
 	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) {

@@ -22,6 +22,8 @@ export default async function EventUtility(discordClient: DiscordClient) {
 				const commandIdAbility = commandParts[1].split('_');
 				commandId = commandIdAbility[0];
 				options.ability = commandIdAbility[1];
+			} else {
+				commandId = customCommand;
 			}
 			const command = discordClient.commands.get(commandId);
 			if (!command) {

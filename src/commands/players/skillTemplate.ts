@@ -15,7 +15,7 @@ export default {
 	},
 
 	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) {
-		console.log('## responds', interaction.fields);
+		console.log('## responds', interaction.customId, interaction.fields);
 
 		const diceBonusMalus = interaction.fields.getStringSelectValues('diceBonusMalus');
 		const flatBonusMalus = interaction.fields.getStringSelectValues('flatBonusMalus');
@@ -41,7 +41,7 @@ export default {
 
 		const userName = interaction.user.username;
 		const char = discordClient?.characters?.get(userName);
-		const skillName = 'acrobatics';
+		const skillName = interaction.customId;
 		const isDebuff = rollOptions.buff.startsWith('-');
 		const rollResult = doSkillCheck(char?.character, skillName, rollOptions);
 
