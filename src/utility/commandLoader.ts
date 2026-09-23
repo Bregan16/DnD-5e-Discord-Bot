@@ -23,6 +23,7 @@ export default async function CommandLoader(discordClient: DiscordClient) {
 				const copy = JSON.parse(JSON.stringify(specialCommand));
 				copy.data = new SlashCommandBuilder().setName(skill).setDescription(`Do a ${skill} check!`).toJSON();
 				copy.execute = specialCommand?.execute;
+				copy.responds = specialCommand?.responds;
 				discordClient.commands.set(skill, copy);
 				console.log('##  -', skill );
 			}

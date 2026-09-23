@@ -1,67 +1,65 @@
 import {
-	ChatInputCommandInteraction,
+	ChatInputCommandInteraction, ModalSubmitInteraction,
 	SlashCommandBuilder,
 } from 'discord.js';
 import { doSkillCheck, getDifficultyClass } from '../../utility/chracterUtils';
-import { createAdvantageRow, createBuffRows, runTwoStepButtonPrompt } from '../../utility/discordUi';
+import { getBuffModal } from '../../utility/discordUi';
 
 export default {
 	data: new SlashCommandBuilder().setName('skilltemplate').setDescription('Do a skillTemplate check!'),
-	execute: async (
-		interaction: ChatInputCommandInteraction,
-		discordClient: DiscordClient,
-	) => {
-		try {
-			const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
-			const advantageRow = createAdvantageRow();
 
-			const { firstChoice, secondChoice } = await runTwoStepButtonPrompt(
-				interaction,
-				'Select a buff for your check!',
-				[buffRow, deBuffRow, noBuffRow],
-				'Now choose Advantage/Disadvantage for your check!',
-				[advantageRow],
-			);
+	async execute(interaction: ChatInputCommandInteraction, discordClient: DiscordClient) {
+		const skillName = interaction.commandName;
+		const modal = await getBuffModal(skillName);
+		await interaction.showModal(modal);
+	},
 
-			const selectedBuff = firstChoice.customId;
-			const selectedMode = secondChoice.customId;
-			const isDebuff = selectedBuff.startsWith('-');
-			const rollOptions: SkillRollOptions = {
-				buff: '',
-			};
+	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) {
+		console.log('## responds', interaction.fields);
 
-			if (selectedBuff !== 'noBuff') {
-				rollOptions.buff = selectedBuff;
-			}
+		const diceBonusMalus = interaction.fields.getStringSelectValues('diceBonusMalus');
+		const flatBonusMalus = interaction.fields.getStringSelectValues('flatBonusMalus');
+		const advantageDisadvantage = interaction.fields.getRadioGroup('advantageDisadvantage');
+		console.log(diceBonusMalus, flatBonusMalus, advantageDisadvantage);
+		const rollOptions: SkillRollOptions = {
+			buff: '',
+			buffDice: '',
+			advantage: 'no',
+		};
 
-			if (selectedMode === 'advantage' || selectedMode === 'disadvantage') {
-				rollOptions.advantage = selectedMode;
-			}
-
-			const userName = interaction.user.username;
-			const skillName = interaction.commandName;
-			const char = discordClient?.characters?.get(userName);
-			const rollResult = doSkillCheck(char?.character, skillName, rollOptions);
-
-			let content = '';
-			const difficultyClass = getDifficultyClass(rollResult.total);
-			if (selectedBuff === 'noBuff') {
-				content = `${userName}, did a **${skillName}** check without a buff ${selectedMode !== 'non' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
-			}
-			else {
-				content = `${userName}, did a **${skillName}** check with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'non' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
-			}
-			await secondChoice.reply({
-				content,
-				components: [],
-			});
+		if (diceBonusMalus[0] !== undefined) {
+			rollOptions.buff = diceBonusMalus[0];
 		}
-		catch (error) {
-			console.error('Error during confirmation:', error);
-			await interaction.editReply({
-				content: 'Confirmation not received within 1 minute, cancelling',
-				components: [],
-			});
+
+		if (flatBonusMalus[0] !== undefined) {
+			rollOptions.buffDice = flatBonusMalus[0];
+		}
+
+		if (advantageDisadvantage && advantageDisadvantage !== 'no') {
+			rollOptions.advantage = advantageDisadvantage as 'advantage' | 'disadvantage' | 'no';
+		}
+
+		const userName = interaction.user.username;
+		const char = discordClient?.characters?.get(userName);
+		const skillName = 'acrobatics';
+		const isDebuff = rollOptions.buff.startsWith('-');
+		const rollResult = doSkillCheck(char?.character, skillName, rollOptions);
+
+		console.log('## rollResult', diceBonusMalus.length, flatBonusMalus.length, advantageDisadvantage, rollResult.total);
+		const difficultyClass = getDifficultyClass(rollResult.total);
+		let content:string;
+		if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
+			content = `${userName}, did a **${skillName}** check without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+		}
+		else {
+			content = `${userName}, did a **${skillName}** check with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+		}
+		await interaction.reply({
+			content,
+			components: [],
+		});
+
+		if (interaction.customId === 'ping') {
 		}
 	},
 };

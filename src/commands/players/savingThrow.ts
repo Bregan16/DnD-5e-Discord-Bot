@@ -37,6 +37,8 @@ export default {
 			const isDebuff = selectedBuff.startsWith('-');
 			const rollOptions: SkillRollOptions = {
 				buff: '',
+				buffDice: '',
+				advantage: 'no',
 			};
 
 			if (selectedBuff !== 'noBuff') {
@@ -55,10 +57,10 @@ export default {
 			let content:string;
 			const difficultyClass = getDifficultyClass(rollResult.total);
 			if (selectedBuff === 'noBuff') {
-				content = `${userName}, did a **${abilityName}** saving throw without a buff ${selectedMode !== 'non' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a **${abilityName}** saving throw without a buff ${selectedMode !== 'no' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
 			else {
-				content = `${userName}, did a **${abilityName}** saving throw with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'non' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a **${abilityName}** saving throw with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'no' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
 			await thirdChoice.update({
 				content,

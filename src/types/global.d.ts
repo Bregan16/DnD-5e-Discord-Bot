@@ -131,14 +131,15 @@ declare global {
   }
 
   type SkillRollOptions = {
-    buff?: string;
-    advantage?: 'advantage' | 'disadvantage' | '';
+    buff: string;
+    buffDice: string;
+    advantage: 'advantage' | 'disadvantage' | 'no';
   };
 
   type DiscordCommand = {
     data: { name: string };
     execute: (interaction: import('discord.js').ChatInputCommandInteraction, discordClient: DiscordClient) => Promise<void>;
-    responds: (interaction: import('discord.js').ModalSubmitInteraction, discordClient: DiscordClient) => Promise<void>;
+    responds?: (interaction: import('discord.js').ModalSubmitInteraction, discordClient: DiscordClient, responds: any) => Promise<void>;
   };
 
   type DiscordClient = Client<boolean> & {

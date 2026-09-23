@@ -10,17 +10,27 @@ export default async function EventUtility(discordClient: DiscordClient) {
 
 
 	discordClient.on(Events.InteractionCreate, async (interaction) => {
-
 		if (interaction.isModalSubmit()){
-			const command = discordClient.commands.get(interaction.customId);
+			const customCommand = interaction.customId;
+			let commandId = ''
+			const options = {
+				ability: '',
+			};
+			console.log('## customId', customCommand);
+			if(customCommand.startsWith('splitt_command_')) {
+				const commandParts = customCommand.split('splitt_command_');
+				const commandIdAbility = commandParts[1].split('_');
+				commandId = commandIdAbility[0];
+				options.ability = commandIdAbility[1];
+			}
+			const command = discordClient.commands.get(commandId);
 			if (!command) {
-				console.error(`No command matching ${interaction.customId} was found.`);
+				console.error(`No command matching ${commandId} was found.`);
 				return;
 			}
-
-			console.log(interaction.customId);
 			try {
-				await command.responds(interaction, discordClient);
+				console.log('## command', command.data.name, options );
+				await command.responds?.(interaction, discordClient, options);
 			}
 			catch (error) {
 				console.error(error);

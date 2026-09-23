@@ -6,7 +6,7 @@ const discordClient = new Client({
     intents: [GatewayIntentBits.Guilds],
 });
 const rootPath = fileURLToPath(import.meta.url);
-await CommandLoader(discordClient, rootPath);
+await CommandLoader(discordClient);
 await CharacterManager(discordClient, rootPath);
 await EventUtility(discordClient);
 if (process.env.NODE_ENV !== 'test') {

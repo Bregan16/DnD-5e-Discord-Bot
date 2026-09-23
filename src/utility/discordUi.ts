@@ -7,6 +7,11 @@ import {
 	ComponentType,
 	Message,
 	MessageFlags,
+	LabelBuilder,
+	ModalBuilder,
+	ModalSubmitInteraction,
+	StringSelectMenuBuilder,
+	StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import { ABILITIES_LIST } from './const';
 
@@ -37,7 +42,7 @@ export const createBuffRows = (): {
 };
 
 export const createAdvantageRow = (): ActionRowBuilder<ButtonBuilder> => {
-	const noAdvantage = new ButtonBuilder().setCustomId('non').setLabel('Non').setStyle(ButtonStyle.Secondary);
+	const noAdvantage = new ButtonBuilder().setCustomId('no').setLabel('no').setStyle(ButtonStyle.Secondary);
 	const buffAdvantage = new ButtonBuilder().setCustomId('advantage').setLabel('Advantage').setStyle(ButtonStyle.Success);
 	const buffDisAdvantage = new ButtonBuilder().setCustomId('disadvantage').setLabel('Disadvantage').setStyle(ButtonStyle.Danger);
 
@@ -58,6 +63,32 @@ export const createAbilityRow = (): { actionFirstRow: ActionRowBuilder<ButtonBui
 	return { actionFirstRow, actionSecondRow };
 };
 
+export const runOneStepButtonPrompt = async (
+	interaction: ChatInputCommandInteraction,
+	prompt: string,
+	components: ActionRowBuilder<ButtonBuilder>[],
+): Promise<{ firstChoice: ButtonInteraction }> => {
+	const collectorFilter = (i: { user: { id: string } }) => i.user.id === interaction.user.id;
+	const initialResponse = await interaction.reply({
+		content: prompt,
+		components,
+		withResponse: true,
+		flags: MessageFlags.Ephemeral,
+	});
+	const initialMessage = initialResponse.resource?.message;
+	if (!initialMessage) {
+		throw new Error('Initial interaction response message was not created');
+	}
+
+	const firstChoice = await initialMessage.awaitMessageComponent({
+		filter: collectorFilter,
+		time: 60_000,
+		componentType: ComponentType.Button,
+	});
+
+	return { firstChoice };
+};
+
 export const runTwoStepButtonPrompt = async (
 	interaction: ChatInputCommandInteraction,
 	firstPrompt: string,
@@ -70,7 +101,7 @@ export const runTwoStepButtonPrompt = async (
 		content: firstPrompt,
 		components: firstComponents,
 		withResponse: true,
-		flags: MessageFlags.Ephemeral
+		flags: MessageFlags.Ephemeral,
 	});
 	const initialMessage = initialResponse.resource?.message;
 	if (!initialMessage) {
@@ -98,7 +129,7 @@ export const runTwoStepButtonPrompt = async (
 };
 
 export const runThreeStepButtonPrompt = async (
-	interaction: ChatInputCommandInteraction,
+	interaction: ChatInputCommandInteraction | ModalSubmitInteraction,
 	firstPrompt: string,
 	firstComponents: ActionRowBuilder<ButtonBuilder>[],
 	secondPrompt: string,
@@ -148,40 +179,104 @@ export const runThreeStepButtonPrompt = async (
 	return { firstChoice, secondChoice, thirdChoice };
 };
 
-export const getBuffUIElements = async (
-	name: string,
-	interaction: ChatInputCommandInteraction,
-): Promise<Message<boolean>> => {
-	const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
+export const getBuffModal = async (
+	customId: string,
+): Promise<ModalBuilder> => {
+	const modal: ModalBuilder = new ModalBuilder().setCustomId(customId).setTitle('Select your modifiers');
 
-	const response = await interaction.reply({
-		content: `Select a buff for your "${name}" check!`,
-		components: [buffRow, deBuffRow, noBuffRow],
-		withResponse: true,
-	});
-	const message = response.resource?.message;
-	if (!message) {
-		throw new Error('Buff interaction response message was not created');
-	}
+	const flatBonusMalus = new StringSelectMenuBuilder()
+		.setCustomId('flatBonusMalus')
+		.setPlaceholder('No flat bonus or malus')
+		.setRequired(false)
+		.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1')
+				.setValue('+1'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+2')
+				.setValue('+2'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+3')
+				.setValue('+3'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+4')
+				.setValue('+4'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+5')
+				.setValue('+5'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1')
+				.setValue('-1'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-2')
+				.setValue('-2'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-3')
+				.setValue('-3'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-4')
+				.setValue('-4'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-5')
+				.setValue('-5'),
+		);
 
-	return message;
-};
+	const diceBonusMalus = new StringSelectMenuBuilder()
+		.setCustomId('diceBonusMalus')
+		.setPlaceholder('No dice bonus or malus')
+		.setRequired(false)
+		.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1d4')
+				.setValue('+1d4'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1d6')
+				.setValue('+1d6'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1d8')
+				.setValue('+1d8'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1d10')
+				.setValue('+1d10'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('+1d12')
+				.setValue('+1d12'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1d4')
+				.setValue('-1d4'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1d6')
+				.setValue('-1d6'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1d8')
+				.setValue('-1d8'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1d10')
+				.setValue('-1d10'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('-1d12')
+				.setValue('-1d12'),
+		);
 
-export const getAdvantageUIElements = async (
-	name: string,
-	interaction: ChatInputCommandInteraction,
-): Promise<Message<boolean>> => {
-	const row = createAdvantageRow();
+	const bonusMalusSelect = new LabelBuilder()
+		.setLabel('Select a flat bonus or malus')
+		.setStringSelectMenuComponent(flatBonusMalus);
 
-	const response = await interaction.reply({
-		content: `Now choose Advantage/Disadvantage for your "${name}" check!`,
-		components: [row],
-		withResponse: true,
-	});
-	const message = response.resource?.message;
-	if (!message) {
-		throw new Error('Advantage interaction response message was not created');
-	}
+	const diceBonusMalusSelect2 = new LabelBuilder()
+		.setLabel('Select a dice bonus or malus')
+		.setStringSelectMenuComponent(diceBonusMalus);
 
-	return message;
+	const advantageDisadvantage = new LabelBuilder()
+		.setLabel('Select Advantage/Disadvantage')
+		.setRadioGroupComponent((radioGroup) =>
+			radioGroup.setCustomId('advantageDisadvantage').addOptions([
+				{ label: 'no', value: 'no', default: true },
+				{ label: 'Advantage', value: 'advantage' },
+				{ label: 'Disadvantage', value: 'disadvantage' },
+			]),
+		);
+
+	modal.addLabelComponents(bonusMalusSelect, diceBonusMalusSelect2, advantageDisadvantage);
+
+	return modal;
 };
