@@ -1,68 +1,41 @@
 import {
-	ChatInputCommandInteraction,
+	ChatInputCommandInteraction, ModalSubmitInteraction,
 	SlashCommandBuilder,
 } from 'discord.js';
-import { doSavingThrowCheck, getDifficultyClass } from '../../utility/chracterUtils';
-import {
-	createAbilityRow,
-	createAdvantageRow,
-	createBuffRows,
-	runThreeStepButtonPrompt,
-} from '../../utility/discordUi';
+import { getDifficultyClass } from '../../utility/chracterUtils';
+import { createAbilityModal, createBonusMaldsRepondsData } from '../../utility/discordUi';
+import { SLASH_COMMAND_LIST } from '../../utility/const';
 
 export default {
-	data: new SlashCommandBuilder().setName('savingthrow').setDescription('Do a saving throw check!'),
-	execute: async (
-		interaction: ChatInputCommandInteraction,
-		discordClient: DiscordClient,
-	) => {
+	data: new SlashCommandBuilder().setName(SLASH_COMMAND_LIST.SAVING_THROW).setDescription('Do a saving throw check!'),
+
+	async execute(interaction: ChatInputCommandInteraction){
+		await createAbilityModal(interaction);
+	},
+
+	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) {
 		try {
-			const { actionFirstRow, actionSecondRow } = createAbilityRow();
-			const { buffRow, deBuffRow, noBuffRow } = createBuffRows();
-			const advantageRow = createAdvantageRow();
+			const {
+				rollResult,
+				userName,
+				name,
+				isDebuff,
+				rollOptions,
+				diceBonusMalus,
+				flatBonusMalus,
+				advantageDisadvantage
+			} = createBonusMaldsRepondsData(interaction, discordClient, options);
 
-			const { firstChoice, secondChoice, thirdChoice } = await runThreeStepButtonPrompt(
-				interaction,
-				'Select the attribute for your saving throw!',
-				[actionFirstRow, actionSecondRow],
-				'Select a buff for your saving throw!',
-				[buffRow, deBuffRow, noBuffRow],
-				'Now choose Advantage/Disadvantage for your saving throw!',
-				[advantageRow],
-			);
-
-			const selectedSavingThrow = firstChoice.customId;
-			const selectedBuff = secondChoice.customId;
-			const selectedMode = thirdChoice.customId;
-			const isDebuff = selectedBuff.startsWith('-');
-			const rollOptions: SkillRollOptions = {
-				buff: '',
-				buffDice: '',
-				advantage: 'no',
-			};
-
-			if (selectedBuff !== 'noBuff') {
-				rollOptions.buff = selectedBuff;
-			}
-
-			if (selectedMode === 'advantage' || selectedMode === 'disadvantage') {
-				rollOptions.advantage = selectedMode;
-			}
-
-			const userName = interaction.user.username;
-			const abilityName = selectedSavingThrow;
-			const char = discordClient?.characters?.get(userName);
-			const rollResult = doSavingThrowCheck(char?.character, abilityName, rollOptions);
-
-			let content:string;
+			let content = '';
 			const difficultyClass = getDifficultyClass(rollResult.total);
-			if (selectedBuff === 'noBuff') {
-				content = `${userName}, did a **${abilityName}** saving throw without a buff ${selectedMode !== 'no' ? 'and with ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+			if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
+				content = `${userName}, did a **${name}** saving throw without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
 			else {
-				content = `${userName}, did a **${abilityName}** saving throw with a ${isDebuff ? 'de' : ''}buff of ${selectedBuff},  ${selectedMode !== 'no' ? 'and ' + selectedMode + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a **${name}** saving throw with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
 			}
-			await thirdChoice.update({
+
+			await interaction.reply({
 				content,
 				components: [],
 			});

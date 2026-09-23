@@ -15,6 +15,7 @@ export default async function EventUtility(discordClient: DiscordClient) {
 			let commandId = ''
 			const options = {
 				ability: '',
+				skill: ''
 			};
 			console.log('## customId', customCommand);
 			if(customCommand.startsWith('splitt_command_')) {
@@ -24,6 +25,7 @@ export default async function EventUtility(discordClient: DiscordClient) {
 				options.ability = commandIdAbility[1];
 			} else {
 				commandId = customCommand;
+				options.skill = customCommand;
 			}
 			const command = discordClient.commands.get(commandId);
 			if (!command) {
