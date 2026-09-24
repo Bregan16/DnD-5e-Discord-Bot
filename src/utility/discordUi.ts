@@ -12,10 +12,10 @@ import {
 	StringSelectMenuBuilder,
 	StringSelectMenuOptionBuilder,
 } from 'discord.js';
-import { ABILITIES_LIST } from './const';
-import { doSavingThrowCheck} from './chracterUtils';
+import { ABILITIES_LIST, CUSTOM_COMMAND_SPLIT } from './const';
+import { doSavingThrowCheck } from './chracterUtils';
 
-export  const createAbilityModal = async (interaction: ChatInputCommandInteraction) => {
+export const createAbilityModal = async (interaction: ChatInputCommandInteraction) => {
 	const skillName = interaction.commandName;
 	const { actionFirstRow, actionSecondRow } = createAbilityRow();
 	const { firstChoice } = await runOneStepButtonPrompt(
@@ -23,13 +23,13 @@ export  const createAbilityModal = async (interaction: ChatInputCommandInteracti
 		`Select the ability for your ${skillName}!`,
 		[actionFirstRow, actionSecondRow],
 	);
-	console.log('## firstChoice', interaction.commandName, firstChoice.customId );
-	const modal = await getBuffModal(`splitt_command_${skillName}_${firstChoice.customId}`);
+	console.log('## firstChoice', interaction.commandName, firstChoice.customId);
+	const modal = await getBuffModal(`${CUSTOM_COMMAND_SPLIT}${skillName}_${firstChoice.customId}`);
 	await firstChoice.showModal(modal);
 	await interaction.deleteReply();
-}
+};
 
-export const createBonusMaldsRepondsData = (interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) => {
+export const createBonusMaldsRespondsData = (interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: RespondsOption) => {
 	console.log('## responds', options, interaction.fields);
 
 	const diceBonusMalus = interaction.fields.getStringSelectValues('diceBonusMalus');
@@ -60,7 +60,7 @@ export const createBonusMaldsRepondsData = (interaction: ModalSubmitInteraction,
 	const rollResult = doSavingThrowCheck(char?.character, name, rollOptions);
 
 	return { rollResult, userName, name, isDebuff, rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage };
-}
+};
 
 export const createAbilityRow = (): { actionFirstRow: ActionRowBuilder<ButtonBuilder>; actionSecondRow: ActionRowBuilder<ButtonBuilder> } => {
 	const actionFirstRow = new ActionRowBuilder<ButtonBuilder>();
@@ -69,7 +69,8 @@ export const createAbilityRow = (): { actionFirstRow: ActionRowBuilder<ButtonBui
 		const buffAbility = new ButtonBuilder().setCustomId(ability).setLabel(ability).setStyle(ButtonStyle.Success);
 		if (index < 3) {
 			actionFirstRow.addComponents(buffAbility);
-		} else {
+		}
+ 		else {
 			actionSecondRow.addComponents(buffAbility);
 		}
 	});

@@ -2,6 +2,7 @@ import {
 	Events,
 	MessageFlags,
 } from 'discord.js';
+import {CUSTOM_COMMAND_SPLIT} from "./const";
 
 export default async function EventUtility(discordClient: DiscordClient) {
 	discordClient.once(Events.ClientReady, (readyClient) => {
@@ -10,20 +11,21 @@ export default async function EventUtility(discordClient: DiscordClient) {
 
 
 	discordClient.on(Events.InteractionCreate, async (interaction) => {
-		if (interaction.isModalSubmit()){
+		if (interaction.isModalSubmit()) {
 			const customCommand = interaction.customId;
-			let commandId = ''
+			let commandId:string;
 			const options = {
 				ability: '',
-				skill: ''
+				skill: '',
 			};
 			console.log('## customId', customCommand);
-			if(customCommand.startsWith('splitt_command_')) {
-				const commandParts = customCommand.split('splitt_command_');
+			if (customCommand.startsWith(CUSTOM_COMMAND_SPLIT)) {
+				const commandParts = customCommand.split(CUSTOM_COMMAND_SPLIT);
 				const commandIdAbility = commandParts[1].split('_');
 				commandId = commandIdAbility[0];
 				options.ability = commandIdAbility[1];
-			} else {
+			}
+			else {
 				commandId = customCommand;
 				options.skill = customCommand;
 			}
@@ -33,7 +35,7 @@ export default async function EventUtility(discordClient: DiscordClient) {
 				return;
 			}
 			try {
-				console.log('## command', command.data.name, options );
+				console.log('## command', command.data.name, options);
 				await command.responds?.(interaction, discordClient, options);
 			}
 			catch (error) {

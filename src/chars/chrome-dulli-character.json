@@ -1,0 +1,314 @@
+{
+  "character": {
+    "basicInfo": {
+      "discoredId": "bregan1971",
+      "name": "Chrome Dulli",
+      "class": "Ranger",
+      "species": "Gnome",
+      "subspecies": "Forest Gnome",
+      "level": 1,
+      "experience": 0,
+      "alignment": "Chaotic Good",
+      "background": "Haunted One"
+    },
+    "abilityScores": {
+      "strength": {
+        "baseScore": 17,
+        "modifier": 3
+      },
+      "dexterity": {
+        "baseScore": 15,
+        "speciesBonus": 2,
+        "totalScore": 17,
+        "modifier": 3
+      },
+      "constitution": {
+        "baseScore": 14,
+        "modifier": 2
+      },
+      "intelligence": {
+        "baseScore": 12,
+        "modifier": 1
+      },
+      "wisdom": {
+        "baseScore": 14,
+        "speciesBonus": 1,
+        "totalScore": 15,
+        "modifier": 2
+      },
+      "charisma": {
+        "baseScore": 8,
+        "modifier": -1
+      }
+    },
+    "hitPoints": {
+      "hitDice": "1d10",
+      "hitDiceCount": 1,
+      "maximumHP": 12,
+      "currentHP": 12,
+      "temporaryHP": 0,
+      "calculation": "10 (Ranger hit die) + 2 (CON modifier)"
+    },
+    "armorAndDefense": {
+      "armorClass": 15,
+      "calculation": "10 (unarmored) + 3 (DEX modifier) + 2 (leather armor)",
+      "armor": "Leather Armor",
+      "shield": "None",
+      "speed": {
+        "value": 30,
+        "unit": "feet"
+      }
+    },
+    "proficiencies": {
+      "savingThrows": [
+        {
+          "ability": "Strength",
+          "isProficient": false
+        },
+        {
+          "ability": "Dexterity",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "ability": "Constitution",
+          "isProficient": false
+        },
+        {
+          "ability": "Intelligence",
+          "isProficient": false
+        },
+        {
+          "ability": "Wisdom",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "ability": "Charisma",
+          "isProficient": false
+        }
+      ],
+      "skills": [
+        {
+          "name": "Acrobatics",
+          "ability": "Dexterity",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "name": "Animal Handling",
+          "ability": "Wisdom",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "name": "Arcana",
+          "ability": "Intelligence",
+          "isProficient": false
+        },
+        {
+          "name": "Athletics",
+          "ability": "Strength",
+          "isProficient": false
+        },
+        {
+          "name": "Deception",
+          "ability": "Charisma",
+          "isProficient": false
+        },
+        {
+          "name": "History",
+          "ability": "Intelligence",
+          "isProficient": false
+        },
+        {
+          "name": "Insight",
+          "ability": "Wisdom",
+          "isProficient": false
+        },
+        {
+          "name": "Intimidation",
+          "ability": "Charisma",
+          "isProficient": false
+        },
+        {
+          "name": "Investigation",
+          "ability": "Intelligence",
+          "isProficient": false
+        },
+        {
+          "name": "Medicine",
+          "ability": "Wisdom",
+          "isProficient": false
+        },
+        {
+          "name": "Nature",
+          "ability": "Intelligence",
+          "isProficient": false
+        },
+        {
+          "name": "Perception",
+          "ability": "Wisdom",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "name": "Performance",
+          "ability": "Charisma",
+          "isProficient": false
+        },
+        {
+          "name": "Persuasion",
+          "ability": "Charisma",
+          "isProficient": false
+        },
+        {
+          "name": "Religion",
+          "ability": "Intelligence",
+          "isProficient": true
+        },
+        {
+          "name": "Sleight of Hand",
+          "ability": "Dexterity",
+          "isProficient": false
+        },
+        {
+          "name": "Stealth",
+          "ability": "Dexterity",
+          "isProficient": true,
+          "note": "Proficient"
+        },
+        {
+          "name": "Survival",
+          "ability": "Wisdom",
+          "isProficient": true,
+          "note": "Proficient"
+        }
+      ]
+    },
+    "combatStats": {
+      "proficiencyBonus": 2,
+      "initiative": 3,
+      "initiative_modifier": "DEX modifier"
+    },
+    "weapons": [
+      {
+        "name": "Shortbow",
+        "type": "Ranged",
+        "damage": "1d6",
+        "damageType": "Piercing",
+        "damageModifier": 3,
+        "totalDamage": "1d6+3",
+        "range": "80/320 feet",
+        "properties": ["Ammunition", "Two-handed", "Mastery"],
+        "weaponMastery": "Slow (Strength save DC 12): This weapon deals 1d6 extra damage if the target is moving toward you on its previous turn."
+      },
+      {
+        "name": "Shortsword",
+        "type": "Melee",
+        "damage": "1d6",
+        "damageType": "Piercing",
+        "damageModifier": 3,
+        "totalDamage": "1d6+3",
+        "range": "Melee (5 ft)",
+        "properties": ["Finesse", "Light", "Mastery"],
+        "weaponMastery": "Sickening (DC 12): If the target is hit by this weapon, it must succeed on a Constitution saving throw (DC 12) or take an extra 1d4 poison damage."
+      }
+    ],
+    "classFeatures": [
+      {
+        "name": "Spellcasting",
+        "description": "You have learned to use the magical essence of nature to cast spells, much the way a druid does. You know two cantrips of your choice from the Ranger spell list. You prepare spells equal to your Wisdom modifier + half your Ranger level (rounded down, minimum of one spell)."
+      },
+      {
+        "name": "Fighting Style",
+        "selected": "Archery",
+        "description": "You gain a +2 bonus to attack rolls you make with ranged weapons."
+      },
+      {
+        "name": "Weapon Mastery",
+        "description": "Your training with weapons allows you to use them with exceptional skill. You gain a special benefit when you attack with a weapon you're proficient with and the weapon has the mastery property."
+      }
+    ],
+    "speciesTraits": [
+      {
+        "name": "Ability Score Increase",
+        "description": "When determining your ability scores, increase one score by 2 and another score by 1, or increase three different scores by 1. You can't increase an ability score above 20 using this feature unless your description states otherwise."
+      },
+      {
+        "name": "Creature Type",
+        "description": "You are a Humanoid."
+      },
+      {
+        "name": "Size",
+        "description": "You are Small."
+      },
+      {
+        "name": "Speed",
+        "description": "Your walking speed is 30 feet."
+      },
+      {
+        "name": "Darkvision",
+        "range": "60 feet",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+      },
+      {
+        "name": "Gnome Cunning",
+        "description": "You have advantage on saving throws you make against spells and magical effects."
+      },
+      {
+        "name": "Speak with Small Beasts",
+        "description": "Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts."
+      }
+    ],
+    "languages": [
+      "Common",
+      "Gnomish"
+    ],
+    "equipment": {
+      "armor": "Leather Armor",
+      "weapons": [
+        "Shortbow",
+        "Shortsword"
+      ],
+      "gear": [
+        "Quiver with 20 arrows",
+        "Dungeoneer's Pack",
+        "Bedroll",
+        "Rope (50 ft)",
+        "Tinker's Tools",
+        "Traveler's Clothes",
+        "Backpack",
+        "Waterskin"
+      ],
+      "treasure": {
+        "goldPieces": 5,
+        "silverPieces": 0,
+        "copperPieces": 0
+      }
+    },
+    "spellcasting": {
+      "spellcastingAbility": "Wisdom",
+      "spellSaveDC": 12,
+      "spellAttackBonus": 4,
+      "cantrips": [
+        {
+          "name": "Produce Flame",
+          "damage": "1d8",
+          "damageType": "Fire",
+          "range": "30 feet",
+          "castingTime": "1 action"
+        },
+        {
+          "name": "Guidance",
+          "range": "Touch",
+          "castingTime": "1 bonus action",
+          "description": "You touch one creature within range. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice."
+        }
+      ],
+      "spellsKnown": 0,
+      "spellsPerDay": "Level 1 Rangers know 2 cantrips and prepare spells equal to WIS modifier (2) + half Ranger level (0) = 2 spells prepared. Spellcasting gained at level 1 (2024 rules)."
+    },
+    "notes": "This is a level 1 Forest Gnome Ranger optimized for ranged combat with high Dexterity and Wisdom scores. The Archery fighting style and high DEX provide excellent accuracy with ranged weapons."
+  }
+}

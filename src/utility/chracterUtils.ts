@@ -117,7 +117,7 @@ export const doSavingThrowCheck = (
 	const isProficient = hasSavingThrowProficiency(char, abilityName);
 	const proficiencyBonus = isProficient ? getProficiencyBonus(char) : 0;
 	return doAbilityCheck(char, abilityName, options, proficiencyBonus);
-}
+};
 
 export const doAbilityCheck = (
 	char: CharacterEntry['character'] | undefined,
@@ -127,7 +127,7 @@ export const doAbilityCheck = (
 		buffDice: string;
 		advantage: 'advantage' | 'disadvantage' | 'no';
 	},
-	proficiencyBonus: number | null = null
+	proficiencyBonus: number | null = null,
 ) : ReturnType<typeof roll> => {
 	const ability = getAbilityEntry(char, abilityName);
 	const proficiencyBonusValue = proficiencyBonus ? `+ ${proficiencyBonus}` : '';

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, MessageFlags } from 'discord.js';
 
 export default {
 	data: new SlashCommandBuilder().setName('user').setDescription('Provides information about the user.'),
@@ -7,8 +7,10 @@ export default {
 		discordClient: DiscordClient,
 	) {
 		const charName = discordClient?.characters?.get(interaction.user.username)?.character?.basicInfo?.name;
-		await interaction.reply(
-			`This command was run by ${interaction.user.username}, who joined on with char name of ${charName}.`,
-		);
+		const className = discordClient?.characters?.get(interaction.user.username)?.character?.basicInfo?.class;
+		await interaction.reply({
+			content: `${interaction.user} is playing a ${className} with the name of ${charName}.`,
+			flags: MessageFlags.Ephemeral,
+		});
 	},
 };

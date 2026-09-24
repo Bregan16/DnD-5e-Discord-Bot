@@ -136,6 +136,11 @@ declare global {
     advantage: 'advantage' | 'disadvantage' | 'no';
   };
 
+  type RespondsOption = {
+    ability: string;
+    skill: string;
+  };
+
   type DiscordCommand = {
     data: { name: string };
     execute: (interaction: import('discord.js').ChatInputCommandInteraction, discordClient: DiscordClient) => Promise<void>;

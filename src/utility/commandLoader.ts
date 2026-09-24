@@ -2,7 +2,7 @@ import {
 	Collection, SlashCommandBuilder,
 } from 'discord.js';
 import { SKILL_LIST } from './const';
-import { allCommands } from "../commands";
+import { allCommands } from '../commands';
 
 export default async function CommandLoader(discordClient: DiscordClient) {
 	discordClient.commands = new Collection();

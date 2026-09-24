@@ -3,7 +3,7 @@ import {
 	SlashCommandBuilder,
 } from 'discord.js';
 import { getDifficultyClass } from '../../utility/chracterUtils';
-import {createBonusMaldsRepondsData, getBuffModal} from '../../utility/discordUi';
+import { createBonusMaldsRespondsData, getBuffModal } from '../../utility/discordUi';
 import { SLASH_COMMAND_LIST } from '../../utility/const';
 
 export default {
@@ -15,7 +15,7 @@ export default {
 		await interaction.showModal(modal);
 	},
 
-	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: any) {
+	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options:RespondsOption) {
 		try {
 			const {
 				rollResult,
@@ -25,16 +25,16 @@ export default {
 				rollOptions,
 				diceBonusMalus,
 				flatBonusMalus,
-				advantageDisadvantage
-			} = createBonusMaldsRepondsData(interaction, discordClient, options);
+				advantageDisadvantage,
+			} = createBonusMaldsRespondsData(interaction, discordClient, options);
 
 			let content = '';
 			const difficultyClass = getDifficultyClass(rollResult.total);
 			if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
-				content = `${userName}, did a **${name}** skill check without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a **${name}** skill check without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
 			}
 			else {
-				content = `${userName}, did a **${name}** skill check with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: ${rollResult.rendered} (DC: ${difficultyClass})`;
+				content = `${userName}, did a **${name}** skill check with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
 			}
 
 			await interaction.reply({

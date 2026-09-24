@@ -3,12 +3,10 @@ import {
 	SlashCommandBuilder,
 } from 'discord.js';
 
-import { getBuffModal } from '../../utility/discordUi';
-
 export default {
 	data: new SlashCommandBuilder().setName('ping').setDescription('Replies with a big Pong!'),
 
-	async execute(interaction: ChatInputCommandInteraction, discordClient: DiscordClient) {
+	async execute(interaction: ChatInputCommandInteraction) {
 		await interaction.reply('Pong!');
 	},
 };
