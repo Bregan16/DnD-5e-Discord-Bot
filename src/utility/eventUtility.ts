@@ -2,7 +2,7 @@ import {
 	Events,
 	MessageFlags,
 } from 'discord.js';
-import {CUSTOM_COMMAND_SPLIT} from "./const";
+import { CUSTOM_COMMAND_SPLIT } from "./const";
 
 export default async function EventUtility(discordClient: DiscordClient) {
 	discordClient.once(Events.ClientReady, (readyClient) => {
