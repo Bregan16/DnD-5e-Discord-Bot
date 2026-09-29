@@ -5,6 +5,7 @@ import user from './utility/user'
 import abilityCheck from './players/abilityCheck'
 import savingThrow from './players/savingThrow'
 import skillTemplate from './players/skillTemplate'
+import charInfo from './players/charInfo'
 
 export const allCommands = {
     common: [
@@ -13,6 +14,7 @@ export const allCommands = {
         user,
         abilityCheck,
         savingThrow,
+        charInfo,
     ],
     special: [
         skillTemplate,

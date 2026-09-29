@@ -13,7 +13,6 @@ import {
 	StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import { ABILITIES_LIST, CUSTOM_COMMAND_SPLIT } from './const';
-import { doSavingThrowCheck } from './chracterUtils';
 
 export const createAbilityModal = async (interaction: ChatInputCommandInteraction) => {
 	const skillName = interaction.commandName;
@@ -29,7 +28,12 @@ export const createAbilityModal = async (interaction: ChatInputCommandInteractio
 	await interaction.deleteReply();
 };
 
-export const createBonusMaldsRespondsData = (interaction: ModalSubmitInteraction, discordClient: DiscordClient, options: RespondsOption) => {
+export const createBonusMaldsRespondsData = (
+	interaction: ModalSubmitInteraction,
+	discordClient: DiscordClient,
+	options: RespondsOption,
+	rollFunction: Function
+) => {
 	console.log('## responds', options, interaction.fields);
 
 	const diceBonusMalus = interaction.fields.getStringSelectValues('diceBonusMalus');
@@ -57,7 +61,7 @@ export const createBonusMaldsRespondsData = (interaction: ModalSubmitInteraction
 	const name = options.ability !== '' ? options.ability : options.skill;
 	const isDebuff = rollOptions.buff.startsWith('-');
 	const char = discordClient?.characters?.get(userName);
-	const rollResult = doSavingThrowCheck(char?.character, name, rollOptions);
+	const rollResult = rollFunction(char?.character, name, rollOptions);
 
 	return { rollResult, userName, name, isDebuff, rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage };
 };

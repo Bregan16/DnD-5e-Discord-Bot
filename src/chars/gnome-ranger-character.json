@@ -14,7 +14,8 @@
     "abilityScores": {
       "strength": {
         "baseScore": 10,
-        "modifier": 0
+        "modifier": 0,
+        "totalScore": 10
       },
       "dexterity": {
         "baseScore": 15,
@@ -24,11 +25,13 @@
       },
       "constitution": {
         "baseScore": 14,
-        "modifier": 2
+        "modifier": 2,
+        "totalScore": 14
       },
       "intelligence": {
         "baseScore": 12,
-        "modifier": 1
+        "modifier": 1,
+        "totalScore": 12
       },
       "wisdom": {
         "baseScore": 14,
@@ -38,7 +41,8 @@
       },
       "charisma": {
         "baseScore": 8,
-        "modifier": -1
+        "modifier": -1,
+        "totalScore": 8
       }
     },
     "hitPoints": {

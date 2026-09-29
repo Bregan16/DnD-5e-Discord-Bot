@@ -7,8 +7,9 @@ export default {
 		discordClient: DiscordClient,
 	) {
 		console.log('## discordClient?.characters ',  interaction.user.username, discordClient?.characters);
-		const charName = discordClient?.characters?.get(interaction.user.username)?.character?.basicInfo?.name;
-		const className = discordClient?.characters?.get(interaction.user.username)?.character?.basicInfo?.class;
+		const char = discordClient?.characters?.get(interaction.user.username)?.character;
+		const charName = char?.basicInfo?.name;
+		const className = char?.basicInfo?.class;
 		let content = `**${interaction.user.username}** is playing a **${className}** with the name of **${charName}**.`;
 		if (charName === undefined || className === undefined) {
 			content = `No character information found for **${interaction.user.username}**.`;

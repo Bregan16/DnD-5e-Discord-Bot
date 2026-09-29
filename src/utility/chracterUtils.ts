@@ -72,7 +72,7 @@ export const hasSkillProficiency = (
 export const getDifficultyClass = (result: number): string => {
 	switch (true) {
 	case (result >= 30): return 'Near impossible';
-	case (result >= 25): return 'Hard';
+	case (result >= 25): return 'Very Hard';
 	case (result >= 20): return 'Hard';
 	case (result >= 15): return 'Medium';
 	case (result >= 10): return 'Easy';
@@ -90,6 +90,7 @@ export const doSkillCheck = (
 		advantage: 'advantage' | 'disadvantage' | 'no';
 	},
 ) : ReturnType<typeof roll> => {
+	console.log('## doSkillCheck' );
 	const abilityModifier:number = getSkillModifier(char, skillName);
 	const isProficient:boolean = hasSkillProficiency(char, skillName);
 	const proficiencyBonus:number = isProficient ? getProficiencyBonus(char) : 0;
@@ -114,6 +115,7 @@ export const doSavingThrowCheck = (
 		advantage: 'advantage' | 'disadvantage' | 'no';
 	},
 ) : ReturnType<typeof roll> => {
+	console.log('## doSavingThrowCheck' );
 	const isProficient = hasSavingThrowProficiency(char, abilityName);
 	const proficiencyBonus = isProficient ? getProficiencyBonus(char) : 0;
 	return doAbilityCheck(char, abilityName, options, proficiencyBonus);
@@ -129,6 +131,7 @@ export const doAbilityCheck = (
 	},
 	proficiencyBonus: number | null = null,
 ) : ReturnType<typeof roll> => {
+	console.log('## doAbilityCheck' );
 	const ability = getAbilityEntry(char, abilityName);
 	const proficiencyBonusValue = proficiencyBonus ? `+ ${proficiencyBonus}` : '';
 

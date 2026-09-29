@@ -4,5 +4,6 @@ export const SLASH_COMMAND_LIST = {
     ABILITY_CHECK: 'abilitycheck',
     SAVING_THROW: 'savingthrow',
     SKILL_TEMPLATE: 'skilltemplate',
+    CHAR_INFO: 'char',
 };
 export const CUSTOM_COMMAND_SPLIT = 'splitt_command_';
