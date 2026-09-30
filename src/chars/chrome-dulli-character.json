@@ -3,7 +3,7 @@
     "basicInfo": {
       "discoredId": "bregan1971",
       "name": "Chrome Dulli",
-      "class": "Ranger",
+      "class": "Rogue",
       "species": "Gnome",
       "subspecies": "Forest Gnome",
       "level": 1,
@@ -46,12 +46,12 @@
       }
     },
     "hitPoints": {
-      "hitDice": "1d10",
+      "hitDice": "1d8",
       "hitDiceCount": 1,
-      "maximumHP": 12,
-      "currentHP": 12,
+      "maximumHP": 10,
+      "currentHP": 10,
       "temporaryHP": 0,
-      "calculation": "10 (Ranger hit die) + 2 (CON modifier)"
+      "calculation": "8 (Rogue hit die) + 2 (CON modifier)"
     },
     "armorAndDefense": {
       "armorClass": 15,
@@ -64,34 +64,26 @@
       }
     },
     "proficiencies": {
-      "savingThrows": [
-        {
-          "ability": "Strength",
+      "savingThrows": {
+        "strength": {
           "isProficient": false
         },
-        {
-          "ability": "Dexterity",
-          "isProficient": true,
-          "note": "Proficient"
+        "dexterity": {
+          "isProficient": true
         },
-        {
-          "ability": "Constitution",
+        "constitution": {
           "isProficient": false
         },
-        {
-          "ability": "Intelligence",
+        "intelligence": {
+          "isProficient": true
+        },
+        "wisdom": {
           "isProficient": false
         },
-        {
-          "ability": "Wisdom",
-          "isProficient": true,
-          "note": "Proficient"
-        },
-        {
-          "ability": "Charisma",
+        "charisma": {
           "isProficient": false
         }
-      ],
+      },
       "skills": [
         {
           "name": "Acrobatics",

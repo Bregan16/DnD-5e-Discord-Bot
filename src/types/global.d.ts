@@ -1,4 +1,4 @@
-import {Client, Collection, ModalSubmitInteraction} from 'discord.js';
+import {APIEmbedField, Client, Collection, ModalSubmitInteraction} from 'discord.js';
 
 declare global {
   type SkillEntry = {
@@ -10,9 +10,7 @@ declare global {
   };
 
   type SavingThrowEntry = {
-    ability: string;
     isProficient: boolean;
-    note?: string;
   };
 
   type AbilityEntry = {
@@ -60,12 +58,14 @@ declare global {
         speed: { value: number; unit: string };
       };
       proficiencies: {
-        savingThrows: Array<{
-          ability: string;
-          modifier: number;
-          isProficient: boolean;
-          note?: string;
-        }>;
+        savingThrows: {
+          strength: SavingThrowEntry;
+          dexterity: SavingThrowEntry;
+          constitution: SavingThrowEntry;
+          intelligence: SavingThrowEntry;
+          wisdom: SavingThrowEntry;
+          charisma: SavingThrowEntry;
+        };
         skills: Array<{
           name: string;
           ability: string;
@@ -150,6 +150,19 @@ declare global {
   type DiscordClient = Client<boolean> & {
     commands: Collection<string, DiscordCommand>;
     characters: Collection<string, CharacterEntry>;
+  };
+
+  type FieldValue = {
+    key: string;
+    value: string | number | undefined;
+  };
+
+  type CreateFieldProps = {
+    fieldName: string;
+    fieldValues: (FieldValue | null)[];
+    isInline?: boolean;
+    valueFormatting?: string;
+    keyFormatting?: string;
   };
 }
 

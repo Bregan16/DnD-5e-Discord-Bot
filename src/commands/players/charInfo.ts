@@ -6,19 +6,6 @@ import {
 } from 'discord.js';
 import { SLASH_COMMAND_LIST } from '../../utility/const';
 
-type FieldValue = {
-	key: string;
-	value: string | number | undefined;
-};
-
-type CreateFieldProps = {
-	fieldName: string;
-	fieldValues: (FieldValue | null)[];
-	isInline?: boolean;
-	valueFormatting?: string;
-	keyFormatting?: string;
-};
-
 const createField = (props: CreateFieldProps): APIEmbedField => {
 	const {
 		fieldName,
@@ -38,18 +25,44 @@ const createField = (props: CreateFieldProps): APIEmbedField => {
 const createEmbedFromCharacter = (character: CharacterEntry['character'] | undefined) => {
 	const embed = {
 		color: 0x0099ff,
-		title: `__**${character?.basicInfo.name}**__`,
+		title: `__**${character?.basicInfo.name}**__ Level ${character?.basicInfo.level} ${character?.basicInfo.class}`,
 		fields: [] as APIEmbedField[],
 	};
+	const proficiencyBonus = character?.combatStats.proficiencyBonus ?? 0;
+	const str = character?.abilityScores.strength.totalScore ?? 0;
+	const dex = character?.abilityScores.dexterity.totalScore ?? 0;
+	const con = character?.abilityScores.constitution.totalScore ?? 0;
+	const int = character?.abilityScores.intelligence.totalScore ?? 0;
+	const wis = character?.abilityScores.wisdom.totalScore ?? 0;
+	const cha = character?.abilityScores.charisma.totalScore ?? 0;
+	const strPro = character?.proficiencies.savingThrows.strength.isProficient ?? false;
+	const dexPro = character?.proficiencies.savingThrows.dexterity.isProficient ?? false;
+	const conPro = character?.proficiencies.savingThrows.constitution.isProficient ?? false;
+	const intPro = character?.proficiencies.savingThrows.intelligence.isProficient ?? false;
+	const wisPro = character?.proficiencies.savingThrows.wisdom.isProficient ?? false;
+	const chaPro = character?.proficiencies.savingThrows.charisma.isProficient ?? false;
+
 	embed.fields.push(createField({
 		fieldName: 'Ability Scores',
 		fieldValues: [
-			{ key: '💪 St', value: character?.abilityScores.strength.totalScore },
-			{ key: '🖐 De', value: character?.abilityScores.dexterity.totalScore },
-			{ key: '🕺 Co', value: character?.abilityScores.constitution.totalScore },
-			{ key: '🧠 In', value: character?.abilityScores.intelligence.totalScore },
-			{ key: '👁️‍🗨️ Wi', value: character?.abilityScores.wisdom.totalScore },
-			{ key: '💋 Ch', value: character?.abilityScores.charisma.totalScore },
+			{ key: '💪 St', value: str },
+			{ key: '🖐 De', value: dex },
+			{ key: '🕺 Co', value: con },
+			{ key: '🧠 In', value: int },
+			{ key: '👁️‍🗨️ Wi', value: wis },
+			{ key: '💋 Ch', value: cha },
+		],
+		isInline: true,
+	}));
+	embed.fields.push(createField({
+		fieldName: 'Saving Throw',
+		fieldValues: [
+			{ key: '💪 St', value: str + (strPro ? proficiencyBonus : 0) },
+			{ key: '🖐 De', value: dex + (dexPro ? proficiencyBonus : 0) },
+			{ key: '🕺 Co', value: con + (conPro ? proficiencyBonus : 0) },
+			{ key: '🧠 In', value: int + (intPro ? proficiencyBonus : 0) },
+			{ key: '👁️‍🗨️ Wi', value: wis + (wisPro ? proficiencyBonus : 0) },
+			{ key: '💋 Ch', value: cha + (chaPro ? proficiencyBonus : 0) },
 		],
 		isInline: true,
 	}));
@@ -72,7 +85,6 @@ export default {
 		if (!interaction.isChatInputCommand()) return;
 		if (interaction.commandName === SLASH_COMMAND_LIST.CHAR_INFO) {
 			const subcommand = interaction.options.getSubcommand();
-			console.log(subcommand, interaction);
 			const char = discordClient?.characters?.get(interaction.user.username)?.character;
 			const embeds = createEmbedFromCharacter(char);
 			try {
