@@ -28,19 +28,13 @@ const createEmbedFromCharacter = (character: CharacterEntry['character'] | undef
 		title: `__**${character?.basicInfo.name}**__ Level ${character?.basicInfo.level} ${character?.basicInfo.class}`,
 		fields: [] as APIEmbedField[],
 	};
-	const proficiencyBonus = character?.combatStats.proficiencyBonus ?? 0;
+	const proficiencyBonus = character?.basicInfo.proficiencyBonus ?? 0;
 	const str = character?.abilityScores.strength.totalScore ?? 0;
 	const dex = character?.abilityScores.dexterity.totalScore ?? 0;
 	const con = character?.abilityScores.constitution.totalScore ?? 0;
 	const int = character?.abilityScores.intelligence.totalScore ?? 0;
 	const wis = character?.abilityScores.wisdom.totalScore ?? 0;
 	const cha = character?.abilityScores.charisma.totalScore ?? 0;
-	const strPro = character?.proficiencies.savingThrows.strength.isProficient ?? false;
-	const dexPro = character?.proficiencies.savingThrows.dexterity.isProficient ?? false;
-	const conPro = character?.proficiencies.savingThrows.constitution.isProficient ?? false;
-	const intPro = character?.proficiencies.savingThrows.intelligence.isProficient ?? false;
-	const wisPro = character?.proficiencies.savingThrows.wisdom.isProficient ?? false;
-	const chaPro = character?.proficiencies.savingThrows.charisma.isProficient ?? false;
 
 	embed.fields.push(createField({
 		fieldName: 'Ability Scores',
@@ -54,15 +48,48 @@ const createEmbedFromCharacter = (character: CharacterEntry['character'] | undef
 		],
 		isInline: true,
 	}));
+	const strPro = character?.proficiencies.savingThrows.strength.isProficient ?? false;
+	const dexPro = character?.proficiencies.savingThrows.dexterity.isProficient ?? false;
+	const conPro = character?.proficiencies.savingThrows.constitution.isProficient ?? false;
+	const intPro = character?.proficiencies.savingThrows.intelligence.isProficient ?? false;
+	const wisPro = character?.proficiencies.savingThrows.wisdom.isProficient ?? false;
+	const chaPro = character?.proficiencies.savingThrows.charisma.isProficient ?? false;
 	embed.fields.push(createField({
 		fieldName: 'Saving Throw',
 		fieldValues: [
-			{ key: '💪 St', value: str + (strPro ? proficiencyBonus : 0) },
-			{ key: '🖐 De', value: dex + (dexPro ? proficiencyBonus : 0) },
-			{ key: '🕺 Co', value: con + (conPro ? proficiencyBonus : 0) },
-			{ key: '🧠 In', value: int + (intPro ? proficiencyBonus : 0) },
-			{ key: '👁️‍🗨️ Wi', value: wis + (wisPro ? proficiencyBonus : 0) },
-			{ key: '💋 Ch', value: cha + (chaPro ? proficiencyBonus : 0) },
+			{ key: '💪 St', value: `${str + (strPro ? proficiencyBonus : 0)}${(strPro ? '*' : '')}` },
+			{ key: '🖐 De', value: `${dex + (dexPro ? proficiencyBonus : 0)}${(dexPro ? '*' : '')}` },
+			{ key: '🕺 Co', value: `${con + (conPro ? proficiencyBonus : 0)}${(conPro ? '*' : '')}` },
+			{ key: '🧠 In', value: `${int + (intPro ? proficiencyBonus : 0)}${(intPro ? '*' : '')}` },
+			{ key: '👁️‍🗨️ Wi', value: `${wis + (wisPro ? proficiencyBonus : 0)}${(wisPro ? '*' : '')}` },
+			{ key: '💋 Ch', value: `${cha + (chaPro ? proficiencyBonus : 0)}${(chaPro ? '*' : '')}` },
+		],
+		isInline: true,
+	}));
+	const maximumHP = character?.hitPoints.maximumHP ?? 0;
+	const speed = character?.armorAndDefense.speed.value ?? 0;
+	embed.fields.push(createField({
+		fieldName: 'General stats',
+		fieldValues: [
+			{ key: 'Hitpoints', value: maximumHP },
+			{ key: 'Speed', value: speed },
+		],
+		isInline: true,
+	}));
+	const initiative = character?.combatStats.initiative ?? 0;
+	const armorClass = character?.armorAndDefense.armorClass ?? 0;
+	const armor = character?.armorAndDefense.armor ?? 0;
+	const shield = character?.armorAndDefense.shield ?? 0;
+	const weapons = character?.weapons ?? [];
+
+	embed.fields.push(createField({
+		fieldName: 'Combat stats',
+		fieldValues: [
+			{ key: 'Initiative', value: initiative },
+			{ key: 'AC', value: armorClass },
+			{ key: 'Armor', value: armor },
+			{ key: 'Shield', value: shield },
+			{ key: 'Weapons', value: weapons.map(weapon => weapon.name).join(', ') },
 		],
 		isInline: true,
 	}));

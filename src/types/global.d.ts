@@ -30,6 +30,7 @@ declare global {
         species: string;
         subspecies: string;
         level: number;
+        proficiencyBonus: number;
         experience: number;
         alignment: string;
         background: string;
@@ -75,7 +76,6 @@ declare global {
         }>;
       };
       combatStats: {
-        proficiencyBonus: number;
         initiative: number;
         initiative_modifier: string;
       };

@@ -8,6 +8,7 @@
       "subspecies": "Forest Gnome",
       "level": 1,
       "experience": 0,
+      "proficiencyBonus": 2,
       "alignment": "Chaotic Good",
       "background": "Haunted One"
     },
@@ -182,7 +183,6 @@
       ]
     },
     "combatStats": {
-      "proficiencyBonus": 2,
       "initiative": 3,
       "initiative_modifier": "DEX modifier"
     },

@@ -3,7 +3,7 @@ import { roll } from 'roll-parser';
 export const getProficiencyBonus = (
 	char: CharacterEntry['character'] | undefined,
 ): number => {
-	return char?.combatStats?.proficiencyBonus ?? 0;
+	return char?.basicInfo?.proficiencyBonus ?? 0;
 };
 
 export const getAbilityEntry = (
@@ -25,9 +25,7 @@ export const getSavingThrowEntry = (
 	char: CharacterEntry['character'] | undefined,
 	abilityName: string,
 ): SavingThrowEntry | undefined => {
-	return char?.proficiencies?.savingThrows?.find(
-		(savingThrow: SavingThrowEntry) => savingThrow.ability.toLocaleLowerCase() === abilityName.toLocaleLowerCase(),
-	);
+	return char?.proficiencies?.savingThrows[abilityName.toLocaleLowerCase()];
 };
 
 export const hasSavingThrowProficiency = (
