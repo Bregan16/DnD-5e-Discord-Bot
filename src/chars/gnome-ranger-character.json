@@ -183,31 +183,28 @@
       ]
     },
     "combatStats": {
-      "initiative": 3,
-      "initiative_modifier": "DEX modifier"
+      "initiative_modifier": "DEX",
+      "weapon_proficiencies": {
+        "simple": true,
+        "martial": true
+      }
     },
     "weapons": [
       {
         "name": "Shortbow",
-        "type": "Ranged",
+        "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Piercing",
-        "damageModifier": 3,
-        "totalDamage": "1d6+3",
-        "range": "80/320 feet",
-        "properties": ["Ammunition", "Two-handed", "Mastery"],
-        "weaponMastery": "Slow (Strength save DC 12): This weapon deals 1d6 extra damage if the target is moving toward you on its previous turn."
+        "mastery": ["Vex"],
+        "properties": ["Ammunition", "Two-handed", "Range 80/320"]
       },
       {
         "name": "Shortsword",
-        "type": "Melee",
+        "proficiency": "martial",
         "damage": "1d6",
         "damageType": "Piercing",
-        "damageModifier": 3,
-        "totalDamage": "1d6+3",
-        "range": "Melee (5 ft)",
-        "properties": ["Finesse", "Light", "Mastery"],
-        "weaponMastery": "Sickening (DC 12): If the target is hit by this weapon, it must succeed on a Constitution saving throw (DC 12) or take an extra 1d4 poison damage."
+        "mastery": ["Vex"],
+        "properties": ["Finesse", "Light"]
       }
     ],
     "classFeatures": [
