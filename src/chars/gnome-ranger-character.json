@@ -1,7 +1,7 @@
 {
   "character": {
     "basicInfo": {
-      "discoredId": "sindbad9050",
+      "discordId": "sindbad9050",
       "name": "Bregan",
       "class": "Ranger",
       "species": "Gnome",
@@ -44,24 +44,6 @@
         "baseScore": 8,
         "modifier": -1,
         "totalScore": 8
-      }
-    },
-    "hitPoints": {
-      "hitDice": "1d10",
-      "hitDiceCount": 1,
-      "maximumHP": 12,
-      "currentHP": 12,
-      "temporaryHP": 0,
-      "calculation": "10 (Ranger hit die) + 2 (CON modifier)"
-    },
-    "armorAndDefense": {
-      "armorClass": 15,
-      "calculation": "10 (unarmored) + 3 (DEX modifier) + 2 (leather armor)",
-      "armor": "Leather Armor",
-      "shield": "None",
-      "speed": {
-        "value": 30,
-        "unit": "feet"
       }
     },
     "proficiencies": {
@@ -182,8 +164,34 @@
         }
       ]
     },
+    "hitPoints": {
+      "hitDice": "1d10",
+      "hitDiceCount": 1,
+      "maximumHP": 12,
+      "currentHP": 12,
+      "temporaryHP": 0,
+      "calculation": "10 (Ranger hit die) + 2 (CON modifier)"
+    },
+    "armorAndDefense": {
+      "armorClass": 14,
+      "calculation": "10 (unarmored) + 3 (DEX modifier) + 1 (leather armor)",
+      "armor": {
+        "name": "Leather Armor",
+        "armorClassBonus": 1,
+        "weight": 10,
+        "cost": {
+          "gold": 10,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "shield": "None",
+      "speed": {
+        "value": 30,
+        "unit": "feet"
+      }
+    },
     "combatStats": {
-      "initiative_modifier": "DEX",
       "weapon_proficiencies": {
         "simple": true,
         "martial": true
@@ -192,19 +200,31 @@
     "weapons": [
       {
         "name": "Shortbow",
+        "proficiency": "Simple",
+        "damage": "1d6",
+        "damageType": "Piercing",
+        "mastery": ["Vex"],
+        "properties": ["Ammunition", "Two-handed", "Range 80/320"],
+        "Weight": 2,
+        "cost": {
+          "gold": 25,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      {
+        "name": "Shortsword",
         "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Piercing",
         "mastery": ["Vex"],
-        "properties": ["Ammunition", "Two-handed", "Range 80/320"]
-      },
-      {
-        "name": "Shortsword",
-        "proficiency": "martial",
-        "damage": "1d6",
-        "damageType": "Piercing",
-        "mastery": ["Vex"],
-        "properties": ["Finesse", "Light"]
+        "properties": ["Finesse", "Light"],
+        "Weight": 2,
+        "cost": {
+          "gold": 10,
+          "silver": 0,
+          "copper": 0
+        }
       }
     ],
     "classFeatures": [

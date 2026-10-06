@@ -15,7 +15,7 @@ export default async function CharacterManager(discordClient: DiscordClient, roo
 	for (const file of charsFiles) {
 		const data = fs.readFileSync(path.join(foldersPath, `${file}`), 'utf8');
 		const parsedData = JSON.parse(data) as CharacterEntry;
-		discordClient.characters.set(parsedData.character.basicInfo.discoredId, parsedData);
+		discordClient.characters.set(parsedData.character.basicInfo.discordId, parsedData);
 		console.log('## Load character:', parsedData.character.basicInfo.name)
 	}
 }

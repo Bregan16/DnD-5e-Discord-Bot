@@ -4,7 +4,6 @@ declare global {
   type SkillEntry = {
     name: string;
     ability: string;
-    modifier: number;
     isProficient: boolean;
     note?: string;
   };
@@ -17,14 +16,37 @@ declare global {
     baseScore: number;
     modifier: number;
     speciesBonus?: number;
-    totalScore?: number;
-    isProficient?: boolean;
+    totalScore: number;
+  };
+
+  type CurrencyEntry = {
+    gold: number;
+    silver: number;
+    copper: number;
+  };
+
+  type ArmorEntry = {
+    name: string;
+    armorClassBonus: number;
+    weight: number;
+    cost: CurrencyEntry;
+  };
+
+  type WeaponEntry = {
+    name: string;
+    proficiency: string;
+    damage: string;
+    damageType: string;
+    mastery: string[];
+    properties: string[];
+    Weight: number;
+    cost: CurrencyEntry;
   };
 
   interface CharacterEntry {
     character: {
       basicInfo: {
-        discoredId: string;
+        discordId: string;
         name: string;
         class: string;
         species: string;
@@ -54,8 +76,8 @@ declare global {
       armorAndDefense: {
         armorClass: number;
         calculation: string;
-        armor: string;
-        shield: string;
+        armor: ArmorEntry | null;
+        shield: ArmorEntry | string | null;
         speed: { value: number; unit: string };
       };
       proficiencies: {
@@ -67,29 +89,15 @@ declare global {
           wisdom: SavingThrowEntry;
           charisma: SavingThrowEntry;
         };
-        skills: Array<{
-          name: string;
-          ability: string;
-          modifier: number;
-          isProficient: boolean;
-          note?: string;
-        }>;
+        skills: SkillEntry[];
       };
       combatStats: {
-        initiative: number;
-        initiative_modifier: string;
+        weapon_proficiencies: {
+          simple: boolean;
+          martial: boolean;
+        };
       };
-      weapons: Array<{
-        name: string;
-        type: string;
-        damage: string;
-        damageType: string;
-        damageModifier: number;
-        totalDamage: string;
-        range: string;
-        properties: string[];
-        weaponMastery: string;
-      }>;
+      weapons: WeaponEntry[];
       classFeatures: Array<{
         name: string;
         description: string;

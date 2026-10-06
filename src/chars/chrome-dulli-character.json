@@ -1,7 +1,7 @@
 {
   "character": {
     "basicInfo": {
-      "discoredId": "bregan1971",
+      "discordId": "bregan1971",
       "name": "Chrome Dulli",
       "class": "Rogue",
       "species": "Gnome",
@@ -44,24 +44,6 @@
         "baseScore": 8,
         "modifier": -1,
         "totalScore": 8
-      }
-    },
-    "hitPoints": {
-      "hitDice": "1d8",
-      "hitDiceCount": 1,
-      "maximumHP": 10,
-      "currentHP": 10,
-      "temporaryHP": 0,
-      "calculation": "8 (Rogue hit die) + 2 (CON modifier)"
-    },
-    "armorAndDefense": {
-      "armorClass": 15,
-      "calculation": "10 (unarmored) + 3 (DEX modifier) + 2 (leather armor)",
-      "armor": "Leather Armor",
-      "shield": "None",
-      "speed": {
-        "value": 30,
-        "unit": "feet"
       }
     },
     "proficiencies": {
@@ -183,8 +165,25 @@
         }
       ]
     },
+    "hitPoints": {
+      "hitDice": "1d8",
+      "hitDiceCount": 1,
+      "maximumHP": 10,
+      "currentHP": 10,
+      "temporaryHP": 0,
+      "calculation": "8 (Rogue hit die) + 2 (CON modifier)"
+    },
+    "armorAndDefense": {
+      "armorClass": 13,
+      "calculation": "10 (unarmored) + 3 (DEX modifier)",
+      "armor": null,
+      "shield": "None",
+      "speed": {
+        "value": 30,
+        "unit": "feet"
+      }
+    },
     "combatStats": {
-      "initiative_modifier": "DEX",
       "weapon_proficiencies": {
         "simple": true,
         "martial": true
@@ -192,12 +191,18 @@
     },
     "weapons": [
       {
-        "name": "Shortbow",
+        "name": "Scimitar",
         "proficiency": "Martial",
         "damage": "1d6",
-        "damageType": "Piercing",
-        "mastery": ["Vex"],
-        "properties": ["Ammunition", "Two-handed", "Range 80/320"]
+        "damageType": "Slashing",
+        "mastery": ["Nick"],
+        "properties": ["Finesse", "Light"],
+        "Weight": 3,
+        "cost": {
+          "gold": 25,
+          "silver": 0,
+          "copper": 0
+        }
       },
       {
         "name": "Shortsword",
@@ -205,7 +210,13 @@
         "damage": "1d6",
         "damageType": "Piercing",
         "mastery": ["Vex"],
-        "properties": ["Finesse", "Light"]
+        "properties": ["Finesse", "Light"],
+        "Weight": 2,
+        "cost": {
+          "gold": 10,
+          "silver": 0,
+          "copper": 0
+        }
       }
     ],
     "classFeatures": [

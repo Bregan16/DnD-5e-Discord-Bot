@@ -31,6 +31,7 @@ const createEmbedFromCharacter = (character: CharacterEntry['character'] | undef
 	const proficiencyBonus = character?.basicInfo.proficiencyBonus ?? 0;
 	const str = character?.abilityScores.strength.totalScore ?? 0;
 	const dex = character?.abilityScores.dexterity.totalScore ?? 0;
+	const dexMod = character?.abilityScores.dexterity.modifier ?? 0;
 	const con = character?.abilityScores.constitution.totalScore ?? 0;
 	const int = character?.abilityScores.intelligence.totalScore ?? 0;
 	const wis = character?.abilityScores.wisdom.totalScore ?? 0;
@@ -76,16 +77,15 @@ const createEmbedFromCharacter = (character: CharacterEntry['character'] | undef
 		],
 		isInline: true,
 	}));
-	const initiative = character?.combatStats.initiative ?? 0;
-	const armorClass = character?.armorAndDefense.armorClass ?? 0;
-	const armor = character?.armorAndDefense.armor ?? 0;
-	const shield = character?.armorAndDefense.shield ?? 0;
+	const armorClass = character?.armorAndDefense.armorClass ?? 10 + dexMod;
+	const armor = character?.armorAndDefense.armor?.name ?? 'None';
+	const shieldEntry = character?.armorAndDefense.shield;
+	const shield = typeof shieldEntry === 'string' ? shieldEntry : shieldEntry?.name ?? 'None';
 	const weapons = character?.weapons ?? [];
 
 	embed.fields.push(createField({
 		fieldName: 'Combat stats',
 		fieldValues: [
-			{ key: 'Initiative', value: initiative },
 			{ key: 'AC', value: armorClass },
 			{ key: 'Armor', value: armor },
 			{ key: 'Shield', value: shield },
