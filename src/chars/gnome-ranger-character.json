@@ -192,8 +192,8 @@
     },
     "combatStats": {
       "weapon_proficiencies": {
-        "simple": true,
-        "martial": true
+        "Simple": true,
+        "Martial": true
       }
     },
     "weapons": [
@@ -202,8 +202,9 @@
         "proficiency": "Simple",
         "damage": "1d6",
         "damageType": "Piercing",
+        "magic": 1,
         "mastery": ["Vex"],
-        "properties": ["Ammunition", "Two-handed", "Range 80/320"],
+        "properties": ["Ammunition", "Two-handed", "Range 80/320", "Magic"],
         "Weight": 2,
         "cost": {
           "gold": 25,
@@ -216,6 +217,7 @@
         "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Piercing",
+        "magic": 0,
         "mastery": ["Vex"],
         "properties": ["Finesse", "Light"],
         "Weight": 2,

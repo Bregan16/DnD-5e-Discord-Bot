@@ -184,8 +184,8 @@
     },
     "combatStats": {
       "weapon_proficiencies": {
-        "simple": true,
-        "martial": true
+        "Simple": true,
+        "Martial": true
       }
     },
     "weapons": [
@@ -194,6 +194,7 @@
         "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Slashing",
+        "magic": 0,
         "mastery": ["Nick"],
         "properties": ["Finesse", "Light"],
         "Weight": 3,
@@ -208,8 +209,9 @@
         "proficiency": "martial",
         "damage": "1d6",
         "damageType": "Piercing",
+        "magic": 1,
         "mastery": ["Vex"],
-        "properties": ["Finesse", "Light"],
+        "properties": ["Finesse", "Light", "Magic"],
         "Weight": 2,
         "cost": {
           "gold": 10,

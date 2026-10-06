@@ -30,6 +30,6 @@ export default async function CombatUtility(discordClient: DiscordClient) {
         clearInitiativeOrder: function() {
             this.initiativeOrder = [];
             this.currentTurnIndex = 0;
-        }
+        },
     }
 }
