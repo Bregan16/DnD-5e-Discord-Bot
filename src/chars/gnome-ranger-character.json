@@ -173,7 +173,6 @@
       "calculation": "10 (Ranger hit die) + 2 (CON modifier)"
     },
     "armorAndDefense": {
-      "armorClass": 14,
       "calculation": "10 (unarmored) + 3 (DEX modifier) + 1 (leather armor)",
       "armor": {
         "name": "Leather Armor",

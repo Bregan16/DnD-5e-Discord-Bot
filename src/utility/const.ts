@@ -5,5 +5,6 @@ export const SLASH_COMMAND_LIST = {
     SAVING_THROW: 'savingthrow',
     SKILL_TEMPLATE: 'skilltemplate',
     CHAR_INFO: 'char',
+    INITIATIVE: 'initiative',
 };
 export const CUSTOM_COMMAND_SPLIT = 'splitt_command_';

@@ -5,7 +5,7 @@ import {
 	GatewayIntentBits,
 } from 'discord.js';
 
-import { CommandLoader, CharacterManager, EventUtility } from './utility/utility';
+import { CommandLoader, CharacterManager, EventUtility, CombatUtility } from './utility';
 
 const discordClient = new Client({
 	intents: [GatewayIntentBits.Guilds],
@@ -15,6 +15,7 @@ const rootPath = fileURLToPath(import.meta.url);
 await CommandLoader(discordClient);
 await CharacterManager(discordClient, rootPath);
 await EventUtility(discordClient);
+await CombatUtility(discordClient);
 
 if (process.env.NODE_ENV !== 'test') {
 	const token = process.env.DISCORD_TOKEN;

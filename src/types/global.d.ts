@@ -74,7 +74,6 @@ declare global {
         calculation: string;
       };
       armorAndDefense: {
-        armorClass: number;
         calculation: string;
         armor: ArmorEntry | null;
         shield: ArmorEntry | string | null;
@@ -158,6 +157,20 @@ declare global {
   type DiscordClient = Client<boolean> & {
     commands: Collection<string, DiscordCommand>;
     characters: Collection<string, CharacterEntry>;
+    combat: {
+      initiativeOrder: Combatant[];
+      currentTurnIndex: number;
+      addCharacterToInitiative: (character: CharacterEntry['character'], initiative: number) => void;
+      removeCharacterFromInitiative: (characterId: string) => boolean;
+      showInitiativeOrder: () => string;
+      clearInitiativeOrder: () => void;
+    };
+  };
+
+  type Combatant = {
+    discordId: string;
+    name: string;
+    initiative: number;
   };
 
   type FieldValue = {

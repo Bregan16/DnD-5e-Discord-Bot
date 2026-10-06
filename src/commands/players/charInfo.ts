@@ -77,7 +77,7 @@ const createEmbedFromCharacter = (character: CharacterEntry['character'] | undef
 		],
 		isInline: true,
 	}));
-	const armorClass = character?.armorAndDefense.armorClass ?? 10 + dexMod;
+	const armorClass = 10 + ((character?.armorAndDefense?.armor?.armorClassBonus ?? 0) + dexMod);
 	const armor = character?.armorAndDefense.armor?.name ?? 'None';
 	const shieldEntry = character?.armorAndDefense.shield;
 	const shield = typeof shieldEntry === 'string' ? shieldEntry : shieldEntry?.name ?? 'None';
