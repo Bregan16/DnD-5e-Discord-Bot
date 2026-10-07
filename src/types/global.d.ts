@@ -40,6 +40,7 @@ declare global {
     mastery: string[];
     properties: string[];
     Weight: number;
+    magic?: number;
     cost: CurrencyEntry;
   };
 

@@ -1,10 +1,51 @@
 export const SKILL_LIST = ['acrobatics', 'animal_handling', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'persuasion', 'religion', 'sleight_of_hand', 'stealth', 'survival'];
 export const ABILITIES_LIST = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+export const MELEE_WEAPON_LIST = [
+    { name: 'Battleaxe', value: 'battleaxe' },
+    { name: 'Club', value: 'club' },
+    { name: 'Dagger', value: 'dagger' },
+    { name: 'Flail', value: 'flail' },
+    { name: 'Glaive', value: 'glaive' },
+    { name: 'Greataxe', value: 'greataxe' },
+    { name: 'Greatclub', value: 'greatclub' },
+    { name: 'Greatsword', value: 'greatsword' },
+    { name: 'Halberd', value: 'halberd' },
+    { name: 'Handaxe', value: 'handaxe' },
+    { name: 'Javelin', value: 'javelin' },
+    { name: 'Light Hammer', value: 'lightHammer' },
+    { name: 'Longsword', value: 'longsword' },
+    { name: 'Mace', value: 'mace' },
+    { name: 'Morningstar', value: 'morningstar' },
+    { name: 'Pike', value: 'pike' },
+    { name: 'Quarterstaff', value: 'quarterstaff' },
+    { name: 'Rapier', value: 'rapier' },
+    { name: 'Scimitar', value: 'scimitar' },
+    { name: 'Shortsword', value: 'shortsword' },
+    { name: 'Spear', value: 'spear' },
+    { name: 'Trident', value: 'trident' },
+    { name: 'War Pick', value: 'warPick' },
+    { name: 'Warhammer', value: 'warhammer' },
+    { name: 'Whip', value: 'whip' },
+];
+// { name: 'Lance', value: 'lance' },
+// { name: 'Maul', value: 'maul' },
+// { name: 'Sickle', value: 'sickle' },
+export const RANGED_WEAPON_LIST = [
+    { name: 'Blowgun', value: 'blowgun' },
+    { name: 'Dart', value: 'dart' },
+    { name: 'Hand Crossbow', value: 'handCrossbow' },
+    { name: 'Heavy Crossbow', value: 'heavyCrossbow' },
+    { name: 'Light Crossbow', value: 'lightCrossbow' },
+    { name: 'Longbow', value: 'longbow' },
+    { name: 'Shortbow', value: 'shortbow' },
+    { name: 'Sling', value: 'sling' },
+];
 export const SLASH_COMMAND_LIST = {
     ABILITY_CHECK: 'abilitycheck',
     SAVING_THROW: 'savingthrow',
     SKILL_TEMPLATE: 'skilltemplate',
     CHAR_INFO: 'char',
     INITIATIVE: 'initiative',
+    ATTACK: 'attack',
 };
 export const CUSTOM_COMMAND_SPLIT = 'splitt_command_';

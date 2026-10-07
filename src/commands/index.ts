@@ -7,6 +7,7 @@ import savingThrow from './players/savingThrow'
 import skillTemplate from './players/skillTemplate'
 import charInfo from './players/charInfo'
 import initiative from './players/initiative'
+import attack from './players/attack'
 
 export const allCommands = {
     common: [
@@ -17,6 +18,7 @@ export const allCommands = {
         savingThrow,
         charInfo,
         initiative,
+        attack,
     ],
     special: [
         skillTemplate,

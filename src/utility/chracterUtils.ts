@@ -143,3 +143,28 @@ export const doAbilityCheck = (
 	}
 	return roll(`1d20 + ${ability?.modifier ?? 0} ${proficiencyBonusValue} ${options?.buff ?? ''} ${options?.buffDice ?? ''}`);
 };
+
+export const doAttackRoll = (
+	character: CharacterEntry['character'],
+	weapon: WeaponEntry,
+): ReturnType<typeof roll> => {
+	const properties = weapon.properties.map(property => property.toLocaleLowerCase());
+	const isRanged = properties.some(property => property.startsWith('range'));
+	const isFinesse = properties.includes('finesse');
+	const strengthModifier = character.abilityScores.strength.modifier;
+	const dexterityModifier = character.abilityScores.dexterity.modifier;
+	const abilityModifier = isRanged
+		? dexterityModifier
+		: isFinesse
+			? Math.max(strengthModifier, dexterityModifier)
+			: strengthModifier;
+	const weaponProficiencies = character.combatStats.weapon_proficiencies;
+	const isProficient = Object.entries(weaponProficiencies).some(
+		([category, proficient]) => category.toLocaleLowerCase() === weapon.proficiency.toLocaleLowerCase() && proficient,
+	);
+	const proficiencyBonus = isProficient ? character.basicInfo.proficiencyBonus : 0;
+	const magicBonus = weapon.magic ?? 0;
+	const totalBonus = abilityModifier + proficiencyBonus + magicBonus;
+
+	return roll(`1d20 + ${totalBonus}`);
+};
