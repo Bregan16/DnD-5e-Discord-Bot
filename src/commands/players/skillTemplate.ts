@@ -19,23 +19,25 @@ export default {
 	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options:RespondsOption) {
 		try {
 			const {
-				rollResult,
 				userName,
-				name,
 				isDebuff,
 				rollOptions,
 				diceBonusMalus,
 				flatBonusMalus,
 				advantageDisadvantage,
-			} = createBonusMaldsRespondsData(interaction, discordClient, options, doSkillCheck);
+			} = createBonusMaldsRespondsData(interaction, options);
+
+			const char = discordClient?.characters?.get(userName);
+			const character = char?.character;
+			const rollResult = doSkillCheck(character, options.skill, rollOptions);
 
 			let content = '';
 			const difficultyClass = getDifficultyClass(rollResult.total);
 			if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
-				content = `${userName}, did a **${name}** skill check without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}, the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
+				content = `${character?.basicInfo.name}, did a **${options.skill}** skill check without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}, the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
 			}
 			else {
-				content = `${userName}, did a **${name}** skill check with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}, the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
+				content = `${character?.basicInfo.name}, did a **${options.skill}** skill check with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}, the result is: **${rollResult.rendered}** (DC: ${difficultyClass})`;
 			}
 
 			await interaction.reply({

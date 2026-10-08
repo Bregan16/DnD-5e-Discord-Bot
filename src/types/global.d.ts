@@ -187,6 +187,21 @@ declare global {
     valueFormatting?: string;
     keyFormatting?: string;
   };
+
+  type RollResult = {
+    readonly total: number;
+    readonly notation: string;
+    readonly expression: string;
+    readonly rendered: string;
+    readonly rolls: DieResult[];
+    readonly parts: RollPart;
+    readonly successes?: number | undefined;
+    readonly failures?: number | undefined;
+    readonly degree?: DegreeOfSuccess | undefined;
+    readonly natural?: number | undefined;
+  }
+
+
 }
 
 export {};

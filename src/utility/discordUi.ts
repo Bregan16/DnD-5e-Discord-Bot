@@ -30,16 +30,14 @@ export const createAbilityModal = async (interaction: ChatInputCommandInteractio
 
 export const createBonusMaldsRespondsData = (
 	interaction: ModalSubmitInteraction,
-	discordClient: DiscordClient,
 	options: RespondsOption,
-	rollFunction: Function
 ) => {
-	console.log('## responds', options, interaction.fields);
+	console.log('## responds', options);
 
 	const diceBonusMalus = interaction.fields.getStringSelectValues('diceBonusMalus');
 	const flatBonusMalus = interaction.fields.getStringSelectValues('flatBonusMalus');
 	const advantageDisadvantage = interaction.fields.getRadioGroup('advantageDisadvantage');
-	console.log(diceBonusMalus, flatBonusMalus, advantageDisadvantage);
+	console.log('## bonusMalus', diceBonusMalus, flatBonusMalus, advantageDisadvantage);
 	const rollOptions: SkillRollOptions = {
 		buff: '',
 		buffDice: '',
@@ -58,19 +56,8 @@ export const createBonusMaldsRespondsData = (
 		rollOptions.advantage = advantageDisadvantage as 'advantage' | 'disadvantage' | 'no';
 	}
 	const userName = interaction.user.username;
-	let name = '';
 	const isDebuff = rollOptions.buff.startsWith('-');
-	const char = discordClient?.characters?.get(userName);
-	let rollResult: any;
-	if (options.weapon === '') {
-		name = 'attack';
-		rollResult = rollFunction(char?.character, name, rollOptions)
-	} else {
-		name = options.ability !== '' ? options.ability : options.skill;
-		rollResult = rollFunction(char?.character, options.weapon)
-	}
-
-	return { rollResult, userName, name, isDebuff, rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage };
+	return { userName, isDebuff, rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage };
 };
 
 export const createAbilityRow = (): { actionFirstRow: ActionRowBuilder<ButtonBuilder>; actionSecondRow: ActionRowBuilder<ButtonBuilder> } => {

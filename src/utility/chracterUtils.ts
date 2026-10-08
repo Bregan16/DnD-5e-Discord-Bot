@@ -88,7 +88,7 @@ export const doSkillCheck = (
 		advantage: 'advantage' | 'disadvantage' | 'no';
 	},
 ) : ReturnType<typeof roll> => {
-	console.log('## doSkillCheck' );
+	console.log('## doSkillCheck');
 	const abilityModifier:number = getSkillModifier(char, skillName);
 	const isProficient:boolean = hasSkillProficiency(char, skillName);
 	const proficiencyBonus:number = isProficient ? getProficiencyBonus(char) : 0;
@@ -113,7 +113,7 @@ export const doSavingThrowCheck = (
 		advantage: 'advantage' | 'disadvantage' | 'no';
 	},
 ) : ReturnType<typeof roll> => {
-	console.log('## doSavingThrowCheck' );
+	console.log('## doSavingThrowCheck');
 	const isProficient = hasSavingThrowProficiency(char, abilityName);
 	const proficiencyBonus = isProficient ? getProficiencyBonus(char) : 0;
 	return doAbilityCheck(char, abilityName, options, proficiencyBonus);
@@ -129,7 +129,7 @@ export const doAbilityCheck = (
 	},
 	proficiencyBonus: number | null = null,
 ) : ReturnType<typeof roll> => {
-	console.log('## doAbilityCheck' );
+	console.log('## doAbilityCheck');
 	const ability = getAbilityEntry(char, abilityName);
 	const proficiencyBonusValue = proficiencyBonus ? `+ ${proficiencyBonus}` : '';
 
@@ -145,9 +145,12 @@ export const doAbilityCheck = (
 };
 
 export const doAttackRoll = (
-	character: CharacterEntry['character'],
+	character: CharacterEntry['character'] | undefined,
 	weaponName: string,
 ): ReturnType<typeof roll> => {
+	if (!character) {
+		return roll('1d20');
+	}
 	const weapon = character.weapons.find(w => w.name === weaponName);
 	if (!weapon) {
 		throw new Error(`Weapon ${weaponName} not found`);
