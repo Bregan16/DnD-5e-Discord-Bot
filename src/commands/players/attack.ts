@@ -1,25 +1,16 @@
 import {
 	ChatInputCommandInteraction,
-	MessageFlags,
+	MessageFlags, ModalSubmitInteraction,
 	SlashCommandBuilder,
 } from 'discord.js';
-import { doAttackRoll } from '../../utility/chracterUtils';
+import {doAttackRoll, doSkillCheck, getDifficultyClass} from '../../utility/chracterUtils';
 import {
+	CUSTOM_COMMAND_SPLIT,
 	MELEE_WEAPON_LIST,
 	RANGED_WEAPON_LIST,
 	SLASH_COMMAND_LIST,
 } from '../../utility/const';
-
-const KSF_CHOICES = [
-	{ name: 'Wuchtschlag', value: 'wuchtschlag' },
-	{ name: 'Finte', value: 'finte' },
-	{ name: 'Sturmangriff', value: 'sturmangriff' },
-	{ name: 'Todesstoß', value: 'todesstoß' },
-	{ name: 'Vorstoß', value: 'vorstoß' },
-	{ name: 'Entwaffnen', value: 'entwaffnen' },
-	{ name: 'Zu Fall bringen', value: 'zufallbringen' },
-	{ name: 'Beidhändiger Kampf', value: 'bk' },
-];
+import {createAbilityModal, createBonusMaldsRespondsData, getBuffModal} from "../../utility/discordUi";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -27,13 +18,13 @@ export default {
 		.setDescription('Roll a weapon attack.')
 		.addStringOption(option =>
 			option
-				.setName('melee-weapon')
+				.setName('melee')
 				.setDescription('The melee weapon to attack with.')
 				.setRequired(false)
 				.addChoices(...MELEE_WEAPON_LIST))
 		.addStringOption(option =>
 			option
-				.setName('ranged-weapon')
+				.setName('ranged')
 				.setDescription('The ranged weapon to attack with.')
 				.setRequired(false)
 				.addChoices(...RANGED_WEAPON_LIST)),
@@ -52,8 +43,8 @@ export default {
 			return;
 		}
 
-		const meleeWeaponValue = interaction.options.getString('melee-weapon');
-		const rangedWeaponValue = interaction.options.getString('ranged-weapon');
+		const meleeWeaponValue = interaction.options.getString('melee');
+		const rangedWeaponValue = interaction.options.getString('ranged');
 		if (Boolean(meleeWeaponValue) === Boolean(rangedWeaponValue)) {
 			await interaction.reply({
 				content: 'Choose exactly one melee or ranged weapon.',
@@ -82,10 +73,50 @@ export default {
 			});
 			return;
 		}
+		const commandName = interaction.commandName;
+		const modal = await getBuffModal(`${CUSTOM_COMMAND_SPLIT}${commandName}_${weapon.name}`);
 
-		const result = doAttackRoll(character, weapon);
-		await interaction.reply({
-			content: `${character.basicInfo.name} attacks with ${weapon.name}: **${result.rendered}**`,
-		});
+		await interaction.showModal(modal);
+
+		// const result = doAttackRoll(character, weapon);
+		// await interaction.reply({
+		// 	content: `${character.basicInfo.name} attacks with ${weapon.name}: **${result.rendered}**`,
+		// });
+	},
+
+	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options:RespondsOption) {
+		try {
+			console.log('## options',  options);
+			const {
+				rollResult,
+				userName,
+				name,
+				isDebuff,
+				rollOptions,
+				diceBonusMalus,
+				flatBonusMalus,
+				advantageDisadvantage,
+			} = createBonusMaldsRespondsData(interaction, discordClient, options, doAttackRoll);
+
+			let content = '';
+			if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
+				content = `${userName}, did an **attack** without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
+			}
+			else {
+				content = `${userName}, did an **attack** with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
+			}
+
+			await interaction.reply({
+				content,
+				components: [],
+			});
+		}
+		catch (error) {
+			console.error('Error during confirmation:', error);
+			await interaction.editReply({
+				content: 'Confirmation not received within 1 minute, cancelling',
+				components: [],
+			});
+		}
 	},
 };

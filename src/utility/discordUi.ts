@@ -58,10 +58,17 @@ export const createBonusMaldsRespondsData = (
 		rollOptions.advantage = advantageDisadvantage as 'advantage' | 'disadvantage' | 'no';
 	}
 	const userName = interaction.user.username;
-	const name = options.ability !== '' ? options.ability : options.skill;
+	let name = '';
 	const isDebuff = rollOptions.buff.startsWith('-');
 	const char = discordClient?.characters?.get(userName);
-	const rollResult = rollFunction(char?.character, name, rollOptions);
+	let rollResult: any;
+	if (options.weapon === '') {
+		name = 'attack';
+		rollResult = rollFunction(char?.character, name, rollOptions)
+	} else {
+		name = options.ability !== '' ? options.ability : options.skill;
+		rollResult = rollFunction(char?.character, options.weapon)
+	}
 
 	return { rollResult, userName, name, isDebuff, rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage };
 };

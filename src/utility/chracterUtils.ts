@@ -146,8 +146,12 @@ export const doAbilityCheck = (
 
 export const doAttackRoll = (
 	character: CharacterEntry['character'],
-	weapon: WeaponEntry,
+	weaponName: string,
 ): ReturnType<typeof roll> => {
+	const weapon = character.weapons.find(w => w.name === weaponName);
+	if (!weapon) {
+		throw new Error(`Weapon ${weaponName} not found`);
+	}
 	const properties = weapon.properties.map(property => property.toLocaleLowerCase());
 	const isRanged = properties.some(property => property.startsWith('range'));
 	const isFinesse = properties.includes('finesse');

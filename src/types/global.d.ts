@@ -147,6 +147,7 @@ declare global {
   type RespondsOption = {
     ability: string;
     skill: string;
+    weapon: string;
   };
 
   type DiscordCommand = {

@@ -2,7 +2,7 @@ import {
 	Events,
 	MessageFlags,
 } from 'discord.js';
-import { CUSTOM_COMMAND_SPLIT } from "./const";
+import {CUSTOM_COMMAND_SPLIT, SLASH_COMMAND_LIST} from "./const";
 
 export default async function EventUtility(discordClient: DiscordClient) {
 	discordClient.once(Events.ClientReady, (readyClient) => {
@@ -17,15 +17,20 @@ export default async function EventUtility(discordClient: DiscordClient) {
 			const options = {
 				ability: '',
 				skill: '',
+				weapon: '',
 			};
 			console.log('## customId', customCommand);
 			if (customCommand.startsWith(CUSTOM_COMMAND_SPLIT)) {
-				const commandParts = customCommand.split(CUSTOM_COMMAND_SPLIT);
-				const commandIdAbility = commandParts[1].split('_');
-				commandId = commandIdAbility[0];
-				options.ability = commandIdAbility[1];
-			}
-			else {
+				const [activity, activityOption] = customCommand
+					.split(CUSTOM_COMMAND_SPLIT)[1]
+					.split('_');
+				commandId = activity;
+				if (activity === SLASH_COMMAND_LIST.ATTACK) {
+					options.weapon = activityOption;
+				} else {
+					options.ability = activityOption;
+				}
+			} else {
 				commandId = customCommand;
 				options.skill = customCommand;
 			}
