@@ -3,7 +3,7 @@ import {
 	MessageFlags, ModalSubmitInteraction,
 	SlashCommandBuilder,
 } from 'discord.js';
-import { doAttackRoll } from '../../utility/chracterUtils';
+import {doAttackRoll, doDamageRoll} from '../../utility/chracterUtils';
 import {
 	createBonusMaldsRespondsData,
 	getBuffModal,
@@ -92,7 +92,8 @@ export default {
 			const char = discordClient?.characters?.get(userName);
 			const character = char?.character;
 			const rollResult = doAttackRoll(character, weaponType);
-			const content = `${character?.basicInfo.name}, **attack** with a ${weapon.displayName}, the result is: **${rollResult.rendered}**`;
+			const damageRollResult = doDamageRoll(character, weaponType);
+			const content = `${character?.basicInfo.name}, **attack** with a ${weapon.displayName}, the result is: **${rollResult.rendered}**, damage: **${damageRollResult.rendered}**`;
 			await this.output(interaction, content);
 		} else {
 			const commandName = interaction.commandName;
@@ -115,6 +116,7 @@ export default {
 		const char = discordClient?.characters?.get(userName);
 		const character = char?.character;
 		const rollResult = doAttackRoll(character, options.weapon);
+		const damageRollResult = doDamageRoll(character, options.weapon);
 
 		const weapon = character?.weapons.find(
 			entry => entry.name.toLocaleLowerCase() === options.weapon.toLocaleLowerCase(),
@@ -122,10 +124,10 @@ export default {
 
 		let content = '';
 		if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
-			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName}${advantageDisadvantage !== 'no' ? ' and with ' + advantageDisadvantage : ''}, the result is: **${rollResult.rendered}**`;
+			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName}${advantageDisadvantage !== 'no' ? ' and with ' + advantageDisadvantage : ''}, the result is: **${rollResult.rendered}**, damage: **${damageRollResult.rendered}**`;
 		}
 		else {
-			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName} with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice}, ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
+			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName} with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice}, ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**, damage: **${damageRollResult.rendered}**`;
 		}
 		await this.output(interaction, content);
 	},

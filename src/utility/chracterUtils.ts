@@ -144,6 +144,20 @@ export const doAbilityCheck = (
 	return roll(`1d20 + ${ability?.modifier ?? 0} ${proficiencyBonusValue} ${options?.buff ?? ''} ${options?.buffDice ?? ''}`);
 };
 
+export const doDamageRoll = (
+	character: CharacterEntry['character'] | undefined,
+	weaponName: string,
+): ReturnType<typeof roll> => {
+	if (!character) {
+		return roll('1d20');
+	}
+	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
+	if (!weapon) {
+		throw new Error(`Weapon ${weaponName} not found`);
+	}
+	return roll(weapon.damage);
+};
+
 export const doAttackRoll = (
 	character: CharacterEntry['character'] | undefined,
 	weaponName: string,
