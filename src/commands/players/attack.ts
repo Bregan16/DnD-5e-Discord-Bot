@@ -115,8 +115,10 @@ export default {
 
 		const char = discordClient?.characters?.get(userName);
 		const character = char?.character;
-		const rollResult = doAttackRoll(character, options.weapon);
-		const damageRollResult = doDamageRoll(character, options.weapon);
+		console.log('## ddd', rollOptions, diceBonusMalus, flatBonusMalus, advantageDisadvantage);
+		const rollResult = doAttackRoll(character, options.weapon, rollOptions);
+		const isExtraAttack = false; // If extra attack with a Light weapon
+		const damageRollResult = doDamageRoll(character, options.weapon, !isExtraAttack);
 
 		const weapon = character?.weapons.find(
 			entry => entry.name.toLocaleLowerCase() === options.weapon.toLocaleLowerCase(),

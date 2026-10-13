@@ -144,34 +144,18 @@ export const doAbilityCheck = (
 	return roll(`1d20 + ${ability?.modifier ?? 0} ${proficiencyBonusValue} ${options?.buff ?? ''} ${options?.buffDice ?? ''}`);
 };
 
-export const doDamageRoll = (
+const totalCombatBonus = (
 	character: CharacterEntry['character'] | undefined,
-	weaponName: string,
-): ReturnType<typeof roll> => {
-	if (!character) {
-		return roll('1d20');
+	weapon: WeaponEntry | undefined,
+	addAbilityModifier: boolean = true,
+	addProficient: boolean = true,
+) => {
+	if (!character || !weapon) {
+		return 0;
 	}
-	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
-	if (!weapon) {
-		throw new Error(`Weapon ${weaponName} not found`);
-	}
-	return roll(weapon.damage);
-};
-
-export const doAttackRoll = (
-	character: CharacterEntry['character'] | undefined,
-	weaponName: string,
-): ReturnType<typeof roll> => {
-	if (!character) {
-		return roll('1d20');
-	}
-	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
-	if (!weapon) {
-		throw new Error(`Weapon ${weaponName} not found`);
-	}
-	const properties = weapon.properties.map(property => property.toLocaleLowerCase());
+	const properties = weapon?.properties.map(property => property.toLocaleLowerCase());
 	const isRanged = properties.some(property => property.startsWith('range'));
-	const isFinesse = properties.includes('finesse');
+	const isFinesse = properties?.includes('finesse');
 	const strengthModifier = character.abilityScores.strength.modifier;
 	const dexterityModifier = character.abilityScores.dexterity.modifier;
 	const abilityModifier = isRanged
@@ -184,9 +168,50 @@ export const doAttackRoll = (
 		([category, proficient]) => category.toLocaleLowerCase() === weapon.proficiency.toLocaleLowerCase() && proficient,
 	);
 	const proficiencyBonus = isProficient ? character.basicInfo.proficiencyBonus : 0;
-	const magicBonus = weapon.magic ?? 0;
-	const totalBonus = abilityModifier + proficiencyBonus + magicBonus;
+	const magicBonus = weapon?.magic ?? 0;
 	console.log('## totalBonus \n abilityModifier, proficiencyBonus, magicBonus \n',  abilityModifier , proficiencyBonus , magicBonus);
+	return `+${(addAbilityModifier ? abilityModifier : 0)} +${(addProficient ? proficiencyBonus : 0)} +${magicBonus}`;
+};
 
-	return roll(`1d20 + ${totalBonus}`);
+export const doAttackRoll = (
+	character: CharacterEntry['character'] | undefined,
+	weaponName: string,
+	options?: {
+		buff: string;
+		buffDice: string;
+		advantage: 'advantage' | 'disadvantage' | 'no';
+	},
+): ReturnType<typeof roll> => {
+	if (!character) {
+		return roll('0');
+	}
+	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
+	if (!weapon) {
+		throw new Error(`Weapon ${weaponName} not found`);
+	}
+	const totalBonus = totalCombatBonus(character, weapon);
+	let diceBase = '1d20';
+	if (options?.advantage === 'advantage') {
+		diceBase = '2d20kh1';
+	}
+	if (options?.advantage === 'disadvantage') {
+		diceBase = '2d20kl1';
+	}
+	return roll(`${diceBase} ${options?.buff ?? ''} ${options?.buffDice ?? ''} ${totalBonus}`);
+};
+
+export const doDamageRoll = (
+	character: CharacterEntry['character'] | undefined,
+	weaponName: string,
+	addAbilityModifier: boolean = true,
+): ReturnType<typeof roll> => {
+	if (!character) {
+		return roll('0');
+	}
+	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
+	if (!weapon) {
+		throw new Error(`Weapon ${weaponName} not found`);
+	}
+	const totalBonus = totalCombatBonus(character, weapon, addAbilityModifier, false);
+	return roll(`${weapon.damage} ${totalBonus}`);
 };

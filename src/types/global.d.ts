@@ -93,6 +93,7 @@ declare global {
         skills: SkillEntry[];
       };
       combatStats: {
+        turn: any
         weapon_proficiencies: {
           simple: boolean;
           martial: boolean;

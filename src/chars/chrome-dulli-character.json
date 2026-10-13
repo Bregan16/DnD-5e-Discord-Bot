@@ -14,9 +14,9 @@
     },
     "abilityScores": {
       "strength": {
-        "baseScore": 17,
-        "modifier": 3,
-        "totalScore": 17
+        "baseScore": 10,
+        "modifier": 0,
+        "totalScore": 10
       },
       "dexterity": {
         "baseScore": 15,
@@ -217,6 +217,22 @@
         "Weight": 2,
         "cost": {
           "gold": 10,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      {
+        "name": "longsword",
+        "displayName": "Longsword",
+        "proficiency": "martial",
+        "damage": "1d8",
+        "damageType": "Slashing",
+        "magic": 0,
+        "mastery": ["Sap"],
+        "properties": ["Versatile 1d10"],
+        "Weight": 3,
+        "cost": {
+          "gold": 15,
           "silver": 0,
           "copper": 0
         }
