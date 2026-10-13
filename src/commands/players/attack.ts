@@ -92,7 +92,8 @@ export default {
 			const char = discordClient?.characters?.get(userName);
 			const character = char?.character;
 			const rollResult = doAttackRoll(character, weaponType);
-			const damageRollResult = doDamageRoll(character, weaponType);
+			const isExtraAttack = false; // If extra attack with a Light weapon
+			const damageRollResult = doDamageRoll(character, weaponType, !isExtraAttack);
 			const content = `${character?.basicInfo.name}, **attack** with a ${weapon.displayName}, the result is: **${rollResult.rendered}**, damage: **${damageRollResult.rendered}**`;
 			await this.output(interaction, content);
 		} else {
