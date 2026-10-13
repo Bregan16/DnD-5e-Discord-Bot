@@ -34,6 +34,7 @@ declare global {
 
   type WeaponEntry = {
     name: string;
+    displayName: string;
     proficiency: string;
     damage: string;
     damageType: string;

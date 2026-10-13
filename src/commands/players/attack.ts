@@ -22,13 +22,25 @@ export default {
 		.addStringOption(option =>
 			option
 				.setName('melee')
-				.setDescription('The melee weapon to attack with.')
+				.setDescription('Select a melee weapon to attack with.')
 				.setRequired(false)
 				.addChoices(...MELEE_WEAPON_LIST))
 		.addStringOption(option =>
 			option
 				.setName('ranged')
-				.setDescription('The ranged weapon to attack with.')
+				.setDescription('Select a ranged weapon to attack with.')
+				.setRequired(false)
+				.addChoices(...RANGED_WEAPON_LIST))
+		.addStringOption(option =>
+			option
+				.setName('melee_bonus')
+				.setDescription('Select a melee weapon to attack with.')
+				.setRequired(false)
+				.addChoices(...MELEE_WEAPON_LIST))
+		.addStringOption(option =>
+			option
+				.setName('ranged_bonus')
+				.setDescription('Select a ranged weapon to attack with.')
 				.setRequired(false)
 				.addChoices(...RANGED_WEAPON_LIST)),
 
@@ -45,19 +57,16 @@ export default {
 			});
 			return;
 		}
-
-		const meleeWeaponValue = interaction.options.getString('melee');
-		const rangedWeaponValue = interaction.options.getString('ranged');
-		if (Boolean(meleeWeaponValue) === Boolean(rangedWeaponValue)) {
-			await interaction.reply({
-				content: 'Choose exactly one melee or ranged weapon.',
-				flags: MessageFlags.Ephemeral,
-			});
-			return;
+		let attackType = interaction.options.data[0].name;
+		let withBonusMalus = false;
+		const weaponType = interaction.options.data[0].value as string;
+		if (attackType.includes('_bonus')) {
+			attackType = attackType.replace('_bonus', '');
+			withBonusMalus = true;
 		}
 
 		const weaponChoice = [...MELEE_WEAPON_LIST, ...RANGED_WEAPON_LIST]
-			.find(({ value }) => value === (meleeWeaponValue ?? rangedWeaponValue));
+			.find(({ value }) => value === weaponType);
 		if (!weaponChoice) {
 			await interaction.reply({
 				content: 'The selected weapon is not recognized.',
@@ -76,35 +85,53 @@ export default {
 			});
 			return;
 		}
-		const commandName = interaction.commandName;
-		const modal = await getBuffModal(`${CUSTOM_COMMAND_SPLIT}${commandName}_${weapon.name}`);
-		await interaction.showModal(modal);
+
+		console.log('## ', attackType, weaponType);
+		if (!withBonusMalus) {
+			const userName = interaction.user.username;
+			const char = discordClient?.characters?.get(userName);
+			const character = char?.character;
+			const rollResult = doAttackRoll(character, weaponType);
+			const content = `${character?.basicInfo.name}, **attack** with a ${weapon.displayName}, the result is: **${rollResult.rendered}**`;
+			await this.output(interaction, content);
+		} else {
+			const commandName = interaction.commandName;
+			const modal = await getBuffModal(`${CUSTOM_COMMAND_SPLIT}${commandName}_${weapon.name}`);
+			await interaction.showModal(modal);
+		}
 	},
 
 	async responds(interaction: ModalSubmitInteraction, discordClient: DiscordClient, options:RespondsOption) {
+		console.log('## options', options);
+		const {
+			userName,
+			isDebuff,
+			rollOptions,
+			diceBonusMalus,
+			flatBonusMalus,
+			advantageDisadvantage,
+		} = createBonusMaldsRespondsData(interaction, options);
+
+		const char = discordClient?.characters?.get(userName);
+		const character = char?.character;
+		const rollResult = doAttackRoll(character, options.weapon);
+
+		const weapon = character?.weapons.find(
+			entry => entry.name.toLocaleLowerCase() === options.weapon.toLocaleLowerCase(),
+		);
+
+		let content = '';
+		if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
+			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName}${advantageDisadvantage !== 'no' ? ' and with ' + advantageDisadvantage : ''}, the result is: **${rollResult.rendered}**`;
+		}
+		else {
+			content = `${character?.basicInfo.name}, **attack** with a ${weapon?.displayName} with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice}, ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
+		}
+		await this.output(interaction, content);
+	},
+
+	async output(interaction: ChatInputCommandInteraction | ModalSubmitInteraction, content: string) {
 		try {
-			console.log('## options', options);
-			const {
-				userName,
-				isDebuff,
-				rollOptions,
-				diceBonusMalus,
-				flatBonusMalus,
-				advantageDisadvantage,
-			} = createBonusMaldsRespondsData(interaction, options);
-
-			const char = discordClient?.characters?.get(userName);
-			const character = char?.character;
-			const rollResult = doAttackRoll(character, options.weapon);
-
-			let content = '';
-			if (diceBonusMalus.length === 0 && flatBonusMalus.length === 0) {
-				content = `${character?.basicInfo.name}, did an **attack** with a ${options.weapon} without a buff ${advantageDisadvantage !== 'no' ? 'and with ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
-			}
-			else {
-				content = `${character?.basicInfo.name}, did an **attack** with a ${options.weapon} with a ${isDebuff ? 'de' : ''}buff of ${rollOptions.buff} ${rollOptions.buffDice},  ${advantageDisadvantage !== 'no' ? 'and ' + advantageDisadvantage + ', ' : ''}the result is: **${rollResult.rendered}**`;
-			}
-
 			await interaction.reply({
 				content,
 				components: [],

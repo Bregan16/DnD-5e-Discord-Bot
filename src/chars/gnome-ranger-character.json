@@ -198,7 +198,8 @@
     },
     "weapons": [
       {
-        "name": "Shortbow",
+        "name": "shortbow",
+        "displayName": "Shortbow",
         "proficiency": "Simple",
         "damage": "1d6",
         "damageType": "Piercing",
@@ -213,7 +214,8 @@
         }
       },
       {
-        "name": "Shortsword",
+        "name": "shortsword",
+        "displayName": "Shortsword",
         "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Piercing",

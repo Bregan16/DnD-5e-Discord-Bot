@@ -151,7 +151,7 @@ export const doAttackRoll = (
 	if (!character) {
 		return roll('1d20');
 	}
-	const weapon = character.weapons.find(w => w.name === weaponName);
+	const weapon = character.weapons.find(w => w.name.toLocaleLowerCase() === weaponName);
 	if (!weapon) {
 		throw new Error(`Weapon ${weaponName} not found`);
 	}
@@ -172,6 +172,7 @@ export const doAttackRoll = (
 	const proficiencyBonus = isProficient ? character.basicInfo.proficiencyBonus : 0;
 	const magicBonus = weapon.magic ?? 0;
 	const totalBonus = abilityModifier + proficiencyBonus + magicBonus;
+	console.log('## totalBonus \n abilityModifier, proficiencyBonus, magicBonus \n',  abilityModifier , proficiencyBonus , magicBonus);
 
 	return roll(`1d20 + ${totalBonus}`);
 };

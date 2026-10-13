@@ -190,7 +190,8 @@
     },
     "weapons": [
       {
-        "name": "Scimitar",
+        "name": "scimitar",
+        "displayName": "Scimitar of speed",
         "proficiency": "Martial",
         "damage": "1d6",
         "damageType": "Slashing",
@@ -205,7 +206,8 @@
         }
       },
       {
-        "name": "Shortsword",
+        "name": "shortsword",
+        "displayName": "Shortsword",
         "proficiency": "martial",
         "damage": "1d6",
         "damageType": "Piercing",
@@ -215,6 +217,22 @@
         "Weight": 2,
         "cost": {
           "gold": 10,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      {
+        "name": "shortbow",
+        "displayName": "Shortbow",
+        "proficiency": "Simple",
+        "damage": "1d6",
+        "damageType": "Piercing",
+        "magic": 1,
+        "mastery": ["Vex"],
+        "properties": ["Ammunition", "Two-handed", "Range 80/320", "Magic"],
+        "Weight": 2,
+        "cost": {
+          "gold": 25,
           "silver": 0,
           "copper": 0
         }
