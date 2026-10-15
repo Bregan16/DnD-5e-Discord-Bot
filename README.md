@@ -109,6 +109,10 @@ npm run test:watch
 - [Discord Developer Documentation](https://discord.com/developers/docs)
 - [Discord Developers Server](https://discord.gg/discord-developers)
 
+## GraphQL
+- https://medium.com/@tokosbex/graphql-and-node-js-part-1-f54669498383
+- https://medium.com/@tokosbex/node-js-and-graphql-part-2-14583be41620
+
 ## Technology Stack
 - **Language:** TypeScript
 - **Discord Library:** discord.js v14+
