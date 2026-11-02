@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+import graphql from 'graphql';
 const {
     GraphQLObjectType,
     GraphQLInt,
@@ -18,4 +18,4 @@ const OrderType = new GraphQLObjectType({
     }),
 });
 
-module.exports = OrderType;
+export default OrderType;

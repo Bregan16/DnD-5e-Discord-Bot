@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+import graphql from 'graphql';
 const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat } = graphql;
 
 const ProductType = new GraphQLObjectType({
@@ -11,4 +11,4 @@ const ProductType = new GraphQLObjectType({
     }),
 });
 
-module.exports = ProductType;
+export default ProductType;

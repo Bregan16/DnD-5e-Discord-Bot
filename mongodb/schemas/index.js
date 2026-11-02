@@ -1,5 +1,5 @@
 // Import necessary GraphQL modules and dependencies.
-const graphql = require("graphql");
+import graphql from 'graphql';
 const {
     GraphQLSchema,
     GraphQLObjectType,
@@ -9,13 +9,13 @@ const {
 } = graphql;
 
 // Import data models for products and orders.
-const { Product } = require("../models/products");
-const { Order } = require("../models/orders");
+import Product from '../models/products.js';
+import Order from '../models/orders.js';
 
 // Import user-defined data types for GraphQL.
-const ProductType = require("./TypeDefs/ProductType");
-const UserType = require("./TypeDefs/UserType");
-const OrderType = require("./TypeDefs/OrderType");
+import ProductType from './TypeDefs/ProductType.js';
+import UserType from './TypeDefs/UserType.js';
+import OrderType from './TypeDefs/OrderType.js';
 
 // Define the RootQuery, which is the entry point for querying data.
 const RootQuery = new GraphQLObjectType({
@@ -119,7 +119,9 @@ const Mutation = new GraphQLObjectType({
 
     }});
 
-module.exports = new GraphQLSchema({
+const schema = new GraphQLSchema({
     query: RootQuery,
     mutation: Mutation, //add mutations here
 });
+
+export default schema;

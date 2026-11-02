@@ -1,12 +1,13 @@
-const express = require("express");
+import express from 'express';
+import mongoose from 'mongoose';
+import { graphqlHTTP } from 'express-graphql';
+import schema from './schemas/index.js';
+
 const app = express();
-const mongoose = require("mongoose");
 const PORT = 5000;
-const { graphqlHTTP } = require("express-graphql");
-const schema = require("./schemas");
 
 mongoose
-    .connect("mongodb://127.0.0.1/{Your db collection name}")
+    .connect("mongodb://127.0.0.1/discordBotDB}")
     .then(() => console.log("Connected to MongoDB..."))
     .catch((err) => console.error("Could not connect to MongoDB..."));
 

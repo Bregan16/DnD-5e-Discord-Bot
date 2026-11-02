@@ -24,6 +24,10 @@
   "dependencies": {
     "discord.js": "^14.26.5",
     "dotenv": "^16.0.3",
+    "express": "^5.3.0",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.10.3",
+    "mongoose": "^9.11.4",
     "roll-parser": "^3.4.0"
   },
   "devDependencies": {
