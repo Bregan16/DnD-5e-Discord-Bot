@@ -113,6 +113,35 @@ npm run test:watch
 - https://medium.com/@tokosbex/graphql-and-node-js-part-1-f54669498383
 - https://medium.com/@tokosbex/node-js-and-graphql-part-2-14583be41620
 
+## MongoDB character model
+
+`mongodb/models/characters.js` exports the Mongoose `Character` model (default)
+and `characterSchema` (named), based on `src/chars/gnome-ranger-character.json`.
+It preserves the top-level `character` wrapper and original field names, including
+weapon `Weight` and weapon proficiency `Simple`/`Martial`. Nested documents do not
+receive extra `_id` fields. Discord IDs are indexed but not unique, allowing more
+than one character per user.
+
+To import a character from JSON in a Node.js ES module:
+
+```js
+import { readFileSync } from 'node:fs';
+import mongoose from 'mongoose';
+import Character from './mongodb/models/characters.js';
+
+await mongoose.connect('mongodb://127.0.0.1:27017/discordBotDB');
+const data = JSON.parse(readFileSync('./src/chars/gnome-ranger-character.json', 'utf8'));
+await Character.create(data);
+await mongoose.disconnect();
+```
+
+The model validates required character data, integer scores and counters,
+nonnegative currency and hit points, and character levels from 1 to 20.
+Spellcasting and subspecies are optional; armor may be absent or `null`, and
+shield is a string such as `"None"`, matching the source JSON.
+This model does not change the bot's existing file-based character loader or add
+GraphQL character operations.
+
 ## Technology Stack
 - **Language:** TypeScript
 - **Discord Library:** discord.js v14+

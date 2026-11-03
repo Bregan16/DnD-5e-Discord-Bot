@@ -1,0 +1,9 @@
+name: discordBotDB
+services:
+  mongodb-community-server:
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    image: mongodb/mongodb-community-server:9.0-ubi9-slim
+    volumes:
+      - ./data:/data/db

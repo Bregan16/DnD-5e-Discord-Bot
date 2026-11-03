@@ -9,10 +9,12 @@
     "node": ">=18.x"
   },
   "scripts": {
+    "mongodb": "node mongodb/index.js",
+    "dockerdown": "docker compose down",
+    "dockerup": "docker compose up -d",
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
     "start": "node .",
-    "mongodb": "node mongodb/index.js",
     "start:old": "node src/app.ts",
     "register:old": "tsx src/commands.ts",
     "register": "tsx src/deploy-commands.ts",
