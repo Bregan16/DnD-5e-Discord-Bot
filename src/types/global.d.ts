@@ -155,7 +155,8 @@ declare global {
   type DiscordCommand = {
     data: { name: string };
     execute: (interaction: import('discord.js').ChatInputCommandInteraction, discordClient: DiscordClient) => Promise<void>;
-    responds?: (interaction: import('discord.js').ModalSubmitInteraction, discordClient?: DiscordClient, responds: any) => Promise<void>;
+    responds?: (interaction: import('discord.js').ModalSubmitInteraction, discordClient: DiscordClient, options: RespondsOption) => Promise<void>;
+    output?: any;
   };
 
   type DiscordClient = Client<boolean> & {

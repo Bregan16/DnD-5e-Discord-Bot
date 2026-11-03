@@ -6,21 +6,31 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLFloat,
+    GraphQLNonNull,
 } = graphql;
 
 // Import data models for products and orders.
 import Product from '../models/products.js';
 import Order from '../models/orders.js';
+import Character from '../models/characters.js';
 
 // Import user-defined data types for GraphQL.
-import ProductType from './TypeDefs/ProductType.js';
-import UserType from './TypeDefs/UserType.js';
-import OrderType from './TypeDefs/OrderType.js';
+import ProductType from './typeDefs/productType.js';
+import UserType from './typeDefs/userType.js';
+import OrderType from './typeDefs/orderType.js';
+import CharacterType, { CharacterInputType } from './typeDefs/characterType.js';
 
 // Define the RootQuery, which is the entry point for querying data.
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
+        getCharacter: {
+            type: CharacterType,
+            args: { id: { type: new GraphQLNonNull(GraphQLString) } },
+            async resolve(parent, args) {
+                return Character.findById(args.id);
+            },
+        },
         // Products Queries
         getAllProduct: {
             type: new GraphQLList(ProductType), // Define the type of data to be returned (a list of products).
@@ -61,6 +71,17 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
+        createCharacter: {
+            type: CharacterType,
+            args: {
+                character: { type: new GraphQLNonNull(CharacterInputType) },
+            },
+            async resolve(parent, args) {
+                const character = new Character({ character: args.character });
+                await character.save();
+                return character;
+            },
+        },
         //Product mutations
         createProduct: {
             type: ProductType,
