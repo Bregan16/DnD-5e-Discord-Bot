@@ -10,6 +10,35 @@ query {
   }
 }
 ```
+Delete Character GraphQL Client
+```
+mutation {
+  deleteCharacter(id: "6aea31e19c845a82b6f0aac1") {
+    id
+    character {
+      basicInfo {
+        name
+      }
+    }
+  }
+}
+```
+Update Character GraphQL Client
+```
+mutation {
+  updateCharacter(
+    id: "507f1f77bcf86cd799439011"
+    name: "Bregan the Ranger"
+  ) {
+    id
+    character {
+      basicInfo {
+        name
+      }
+    }
+  }
+}
+```
 Add Character GraphQL Client
 ```
 mutation CreateCharacter($character: CharacterInput!) {
