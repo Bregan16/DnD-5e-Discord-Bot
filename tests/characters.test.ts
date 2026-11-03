@@ -17,7 +17,7 @@ describe('Character MongoDB model', () => {
     expect(character.toObject().character).toEqual(fixture.character);
   });
 
-  it('requires the character wrapper and nested character data', () => {
+  it('requires the character wrapper and nested character _data', () => {
     expect(new Character({}).validateSync()?.errors.character).toBeDefined();
 
     const fixture = characterFixture();
