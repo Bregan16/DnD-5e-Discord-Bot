@@ -5,7 +5,7 @@ import {
 	GatewayIntentBits,
 } from 'discord.js';
 
-import { CommandLoader, CharacterManager, EventUtility, CombatUtility, GraphQLClient } from './utility';
+import { CommandLoader, CharacterManager, EventUtility, CombatUtility } from './utility';
 
 const discordClient = new Client({
 	intents: [GatewayIntentBits.Guilds],
@@ -16,15 +16,7 @@ await CommandLoader(discordClient);
 await CharacterManager(discordClient, rootPath);
 await EventUtility(discordClient);
 await CombatUtility(discordClient);
-await GraphQLClient(`
-  {
-	  getAllProduct {
-		id
-		description
-		price
-	  }
-	}
-`);
+
 
 if (process.env.NODE_ENV !== 'test') {
 	const token = process.env.DISCORD_TOKEN;

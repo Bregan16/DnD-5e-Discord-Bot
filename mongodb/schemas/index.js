@@ -1,21 +1,16 @@
-// Import necessary GraphQL modules and dependencies.
 import graphql from 'graphql';
 const {
     GraphQLSchema,
     GraphQLObjectType,
     GraphQLString,
-    GraphQLFloat,
     GraphQLNonNull,
     GraphQLList,
 } = graphql;
 
-// Import data models for products and orders.
-import Product from '../models/products.js';
 import Character from '../models/characters.js';
 
-// Import user-defined data types for GraphQL.
-import ProductType from './typeDefs/productType.js';
-import UserType from './typeDefs/userType.js';
+
+// import UserType from './typeDefs/userType.js';
 import CharacterType, { CharacterInputType } from './typeDefs/characterType.js';
 
 const CharacterSummaryType = new GraphQLObjectType({
@@ -29,7 +24,6 @@ const CharacterSummaryType = new GraphQLObjectType({
     },
 });
 
-// Define the RootQuery, which is the entry point for querying data.
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
@@ -39,6 +33,7 @@ const RootQuery = new GraphQLObjectType({
                 return Character.find({}, { 'character.basicInfo.name': 1 });
             },
         },
+
         getCharacter: {
             type: CharacterType,
             args: { id: { type: new GraphQLNonNull(GraphQLString) } },
@@ -88,46 +83,11 @@ const Mutation = new GraphQLObjectType({
                 return Character.findByIdAndDelete(args.id);
             },
         },
-
-        updateProduct: {
-            type: ProductType,
-            args: {
-                id: { type: GraphQLString },
-                title: { type: GraphQLString },
-                description: { type: GraphQLString },
-                price: { type: GraphQLFloat },
-            },
-            async resolve(parent, args, req) {
-                const newProduct = await Product.findByIdAndUpdate(args.id, {
-                    brand: args.brand,
-                    title: args.title,
-                    description: args.description,
-                    price: args.price,
-                });
-
-                return newProduct;
-            },
-        },
-
-        deleteProduct: {
-            type: ProductType,
-            args: {
-                id: { type: GraphQLString },
-            },
-            async resolve(parent, args) {
-                console.log(args.id);
-
-                const deletedProduct = await Product.findByIdAndDelete(args.id);
-
-                return args;
-            },
-        },
-
     }});
 
 const schema = new GraphQLSchema({
     query: RootQuery,
-    mutation: Mutation, //add mutations here
+    mutation: Mutation,
 });
 
 export default schema;
