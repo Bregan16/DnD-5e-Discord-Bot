@@ -112,6 +112,61 @@ npm run test:watch
 ## GraphQL
 - https://medium.com/@tokosbex/graphql-and-node-js-part-1-f54669498383
 - https://medium.com/@tokosbex/node-js-and-graphql-part-2-14583be41620
+- https://docs.dnd5eapi.co/tutorials/beginner/graphql
+- https://studio.apollographql.com/sandbox/explorer
+
+
+```bash
+query Monsters2024($index: String!, $spellIndex2: String!, $spellIndex3: String!) {
+    spell(index: $spellIndex2) {
+      name
+      description
+      range
+      level
+      higher_level
+      duration
+      ritual
+      material
+      attack_type
+      casting_time
+    }
+    spells {
+      name
+      index
+    }
+    monster2024(index: $index) {
+      name
+      hit_dice
+      hit_points
+      actions {
+        name
+        damage {
+          ... on Damage {
+            damage_dice
+            damage_type {
+              name
+            }
+          }
+        }
+      }
+    }
+    classes {
+      name
+      subclasses {
+        name
+      }
+    }
+    monsters2024 {
+      name
+    }
+  }
+}
+Variables:
+{
+  "index": "adult-black-dragon",
+  "spellIndex2": "hunters-mark"
+}
+```
 
 ## MongoDB character model
 
