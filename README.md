@@ -77,6 +77,13 @@ The commands are defined in `src/commands.ts` and include:
 - `/challenge` - Challenge to rock-paper-scissors
 - `/char_info` - Get character information
 
+Spell lookups use the D&D 5e 2024 GraphQL API:
+- `/spell name:Fire Bolt` - Show a spell's description and details.
+- `/spelllist class:Wizard` - Show the class's spells, sorted by level and name,
+  including each spell's index and school. Each level has its own headline and
+  embed in one private reply. Lists exceeding Discord's embed limits are attached
+  as a complete text file, grouped by level.
+
 ### Run the bot
 
 After registering commands, run the bot in development mode:

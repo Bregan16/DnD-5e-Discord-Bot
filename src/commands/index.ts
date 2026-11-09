@@ -9,6 +9,7 @@ import charInfo from './players/charInfo'
 import initiative from './players/initiative'
 import attack from './players/attack'
 import spell from './players/spell'
+import spellList from './players/spellList'
 
 export const allCommands = {
     common: [
@@ -21,6 +22,7 @@ export const allCommands = {
         initiative,
         attack,
         spell,
+        spellList,
     ],
     special: [
         skillTemplate,

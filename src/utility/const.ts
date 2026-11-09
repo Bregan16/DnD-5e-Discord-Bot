@@ -48,5 +48,6 @@ export const SLASH_COMMAND_LIST = {
     INITIATIVE: 'initiative',
     ATTACK: 'attack',
     SPELL: 'spell',
+    SPELL_LIST: 'spelllist',
 };
 export const CUSTOM_COMMAND_SPLIT = 'splitt_command_';
