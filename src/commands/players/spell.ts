@@ -12,6 +12,7 @@ type Spell = {
 	description: string;
 	range: string;
 	level: number;
+	school: { name: string };
 	higher_level: string | null;
 	duration: string;
 	ritual: boolean;
@@ -37,6 +38,9 @@ const spellQuery = `
 			description
 			range
 			level
+			school {
+				name
+			}
 			higher_level
 			duration
 			ritual
@@ -63,6 +67,7 @@ const spellQuery = `
 const createSpellEmbed = (spell: Spell) => {
 	const fields: APIEmbedField[] = [
 		{ name: 'Level', value: spell.level === 0 ? 'Cantrip' : `${spell.level}`, inline: true },
+		{ name: 'School', value: spell.school.name, inline: true },
 		{ name: 'Casting Time', value: spell.casting_time, inline: true },
 		{ name: 'Range', value: spell.range, inline: true },
 		{ name: 'Duration', value: spell.duration, inline: true },

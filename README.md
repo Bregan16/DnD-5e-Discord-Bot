@@ -78,7 +78,7 @@ The commands are defined in `src/commands.ts` and include:
 - `/char_info` - Get character information
 
 Spell lookups use the D&D 5e 2024 GraphQL API:
-- `/spell name:Fire Bolt` - Show a spell's description and details.
+- `/spell name:Fire Bolt` - Show a spell's description and details, including its school.
 - `/spelllist class:Wizard` - Show the class's spells, sorted by level and name,
   including each spell's index and school. Each level has its own headline and
   embed in one private reply. Lists exceeding Discord's embed limits are attached
@@ -87,6 +87,8 @@ Spell lookups use the D&D 5e 2024 GraphQL API:
   Provide either `class` or `school`, not both.
   Spell lists include a clickable `/spell` command shortcut; enter the spell name
   after clicking it. If the shortcut cannot be resolved, `/spell` is shown as plain text.
+  Each spell also includes a command such as `/spell name:Fire Bolt` for manual
+  copying, both in embeds and in the text attachment.
 
 ### Run the bot
 

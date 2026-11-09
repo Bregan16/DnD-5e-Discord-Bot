@@ -37,7 +37,7 @@ const createSpellListEmbeds = (displayName: string, spells: ListSpell[]) => {
 	let currentLevel: number | undefined;
 	for (const spell of [...spells].sort((a, b) => a.level - b.level || a.name.localeCompare(b.name))) {
 		const heading = `## ${spell.level === 0 ? 'Cantrips' : `Level ${spell.level}`}\n`;
-		const line = `**${spell.name}** - ${spell.school.name} (\`${spell.index}\`)\n`;
+		const line = `**${spell.name}** - (\`${spell.index}\`) - \`/${SLASH_COMMAND_LIST.SPELL} name:${spell.name}\`\n`;
 		if (currentLevel !== spell.level || description.length + line.length > 3800) {
 			if (description) descriptions.push(description);
 			description = heading;

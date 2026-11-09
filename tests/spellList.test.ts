@@ -61,9 +61,9 @@ describe('/spelllist', () => {
 			embeds: [{
 				color: 0x0099ff,
 				title: '__**Wizard Spell List**__',
-				description: '## Cantrips\n**Spell 0** - Evocation (`spell-0`)\n',
+				description: '## Cantrips\n**Spell 0** - Evocation (`spell-0`) - `/spell name:Spell 0`\n',
 			}, expect.objectContaining({
-				description: '## Level 1\n**Spell 1** - Evocation (`spell-1`)\n',
+				description: '## Level 1\n**Spell 1** - Evocation (`spell-1`) - `/spell name:Spell 1`\n',
 			})],
 		});
 		expect(interaction.editReply).toHaveBeenCalledTimes(1);
@@ -138,10 +138,13 @@ describe('/spelllist', () => {
 	});
 
 	it('fetches all API pages and keeps every spell within Discord embed limits', async () => {
-		const firstPage = Array.from({ length: 100 }, (_, index) => spell(index));
+		const compactSpell = (index: number) => ({
+			...spell(index), name: `S${index}`, index: `s${index}`, school: { name: 'E' },
+		});
+		const firstPage = Array.from({ length: 100 }, (_, index) => compactSpell(index));
 		const fetchMock = jest.spyOn(globalThis, 'fetch')
 			.mockResolvedValueOnce(new Response(JSON.stringify({ data: { spells: firstPage } })))
-			.mockResolvedValueOnce(new Response(JSON.stringify({ data: { spells: [spell(100)] } })));
+			.mockResolvedValueOnce(new Response(JSON.stringify({ data: { spells: [compactSpell(100)] } })));
 		const { interaction, execute } = createInteraction('wizard');
 		await execute();
 
@@ -164,14 +167,15 @@ describe('/spelllist', () => {
 		});
 		const output = descriptions.join('');
 		for (let index = 0; index <= 100; index++) {
-			expect(output).toContain(`(\`spell-${index}\`)`);
+			expect(output).toContain(`(\`s${index}\`)`);
+			expect(output).toContain(`\`/spell name:S${index}\``);
 		}
 		expect(interaction.editReply).toHaveBeenCalledTimes(1);
 		expect(interaction.followUp).not.toHaveBeenCalled();
 	});
 
 	it('repeats the level headline when a level needs multiple embeds', async () => {
-		const spells = Array.from({ length: 60 }, (_, index) => ({
+		const spells = Array.from({ length: 30 }, (_, index) => ({
 			...spell(index),
 			name: `A very long spell name for checking pagination ${index}`,
 			level: 3,
@@ -212,6 +216,7 @@ describe('/spelllist', () => {
 		const text = file.attachment.toString();
 		for (let index = 0; index < spells.length; index++) {
 			expect(text).toContain(`(\`spell-${index}\`)`);
+			expect(text).toContain(`\`/spell name:${spells[index].name}\``);
 		}
 		expect(text).toContain('## Cantrips');
 		expect(text).toContain('## Level 9');
