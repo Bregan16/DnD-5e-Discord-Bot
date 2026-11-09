@@ -1,10 +1,18 @@
 import { jest } from '@jest/globals';
-import { APIEmbed, AttachmentBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
+import { APIEmbed, AttachmentBuilder, ChatInputCommandInteraction, Collection, MessageFlags } from 'discord.js';
 import spellList from '../src/commands/players/spellList';
 
-const createInteraction = (className: string) => {
+const createInteraction = (className: string | null, schoolName: string | null = null) => {
 	const interaction = {
-		options: { getString: jest.fn().mockReturnValue(className) },
+		client: {
+			application: {
+				commands: {
+					cache: new Collection([['123456789012345678', { name: 'spell', id: '123456789012345678' }]]),
+					fetch: jest.fn<() => Promise<Collection<string, { name: string; id: string }>>>(),
+				},
+			},
+		},
+		options: { getString: jest.fn((name: string) => name === 'class' ? className : schoolName) },
 		reply: jest.fn<ChatInputCommandInteraction['reply']>(),
 		deferReply: jest.fn<ChatInputCommandInteraction['deferReply']>(),
 		editReply: jest.fn<ChatInputCommandInteraction['editReply']>(),
@@ -26,10 +34,11 @@ const spell = (index: number) => ({
 describe('/spelllist', () => {
 	afterEach(() => jest.restoreAllMocks());
 
-	it('defines a required class option', () => {
+	it('defines optional class and school options', () => {
 		const command = spellList.data.toJSON();
 		expect(command.name).toBe('spelllist');
-		expect(command.options?.[0]).toMatchObject({ name: 'class', required: true });
+		expect(command.options?.[0]).toMatchObject({ name: 'class', required: false });
+		expect(command.options?.[1]).toMatchObject({ name: 'school', required: false });
 	});
 
 	it('normalizes the class and displays spell details in a private embed', async () => {
@@ -42,12 +51,13 @@ describe('/spelllist', () => {
 		expect(fetchMock).toHaveBeenCalledWith(
 			'https://www.dnd5eapi.co/graphql/2024',
 			expect.objectContaining({
-				body: expect.stringContaining('"spellsIndex":["wizard"]'),
+				body: expect.stringContaining('"variables":{"classIndex":["wizard"],"skip":0'),
 			}),
 		);
 		expect(interaction.deferReply).toHaveBeenCalledWith({ flags: MessageFlags.Ephemeral });
 		const embed = interaction.editReply.mock.calls[0][0];
 		expect(embed).toMatchObject({
+			content: 'Use </spell:123456789012345678> and enter a spell name to view its details.',
 			embeds: [{
 				color: 0x0099ff,
 				title: '__**Wizard Spell List**__',
@@ -58,6 +68,73 @@ describe('/spelllist', () => {
 		});
 		expect(interaction.editReply).toHaveBeenCalledTimes(1);
 		expect(interaction.followUp).not.toHaveBeenCalled();
+	});
+
+	it('fetches the registered command ID when it is not cached', async () => {
+		jest.spyOn(globalThis, 'fetch').mockResolvedValue(
+			new Response(JSON.stringify({ data: { spells: [spell(0)] } })),
+		);
+		const { interaction, execute } = createInteraction('wizard');
+		const commands = interaction.client.application.commands;
+		commands.cache.clear();
+		commands.fetch.mockResolvedValue(new Collection([
+			['987654321098765432', { name: 'spell', id: '987654321098765432' }],
+		]));
+		await execute();
+		expect(interaction.editReply).toHaveBeenCalledWith(expect.objectContaining({
+			content: 'Use </spell:987654321098765432> and enter a spell name to view its details.',
+		}));
+	});
+
+	it('keeps the spell list visible if the command shortcut cannot be resolved', async () => {
+		jest.spyOn(globalThis, 'fetch').mockResolvedValue(
+			new Response(JSON.stringify({ data: { spells: [spell(0)] } })),
+		);
+		const errorLog = jest.spyOn(console, 'error').mockImplementation(() => {});
+		const { interaction, execute } = createInteraction('wizard');
+		const commands = interaction.client.application.commands;
+		commands.cache.clear();
+		commands.fetch.mockRejectedValue(new Error('Discord unavailable'));
+		await execute();
+		expect(errorLog).toHaveBeenCalled();
+		expect(interaction.editReply).toHaveBeenCalledWith(expect.objectContaining({
+			content: 'Use `/spell` and enter a spell name to view its details.',
+			embeds: [expect.objectContaining({ title: '__**Wizard Spell List**__' })],
+		}));
+	});
+
+	it('normalizes the school and queries school instead of class', async () => {
+		const fetchMock = jest.spyOn(globalThis, 'fetch').mockResolvedValue(
+			new Response(JSON.stringify({ data: { spells: [spell(0)] } })),
+		);
+		const { interaction, execute } = createInteraction(null, '  EVOCATION  ');
+		await execute();
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			'https://www.dnd5eapi.co/graphql/2024',
+			expect.objectContaining({
+				body: expect.stringContaining('"variables":{"schoolIndex":["evocation"],"skip":0'),
+			}),
+		);
+		expect(interaction.editReply).toHaveBeenCalledWith(expect.objectContaining({
+			embeds: [expect.objectContaining({ title: '__**Evocation Spell List**__' })],
+		}));
+		expect(interaction.editReply).toHaveBeenCalledTimes(1);
+		expect(interaction.followUp).not.toHaveBeenCalled();
+	});
+
+	it.each([
+		[null, null],
+		['wizard', 'evocation'],
+	])('rejects missing or simultaneous filters (%s, %s)', async (className, schoolName) => {
+		const fetchMock = jest.spyOn(globalThis, 'fetch');
+		const { interaction, execute } = createInteraction(className, schoolName);
+		await execute();
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(interaction.reply).toHaveBeenCalledWith({
+			content: 'Provide either a class or a spell school, but not both.',
+			flags: MessageFlags.Ephemeral,
+		});
 	});
 
 	it('fetches all API pages and keeps every spell within Discord embed limits', async () => {
@@ -139,6 +216,9 @@ describe('/spelllist', () => {
 		expect(text).toContain('## Cantrips');
 		expect(text).toContain('## Level 9');
 		expect(message.embeds).toEqual([]);
+		expect(message).toMatchObject({
+			content: expect.stringContaining('</spell:123456789012345678>'),
+		});
 		expect(interaction.editReply).toHaveBeenCalledTimes(1);
 		expect(interaction.followUp).not.toHaveBeenCalled();
 	});
