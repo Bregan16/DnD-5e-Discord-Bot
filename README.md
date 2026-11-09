@@ -84,6 +84,7 @@ Spell lookups use the D&D 5e 2024 GraphQL API:
   embed in one private reply. Lists exceeding Discord's embed limits are attached
   as a complete text file, grouped by level.
 - `/spelllist school:Evocation` - Show spells from a spell school in the same format.
+  Both options offer predefined dropdown choices for the API's 12 classes and 8 schools.
   Provide either `class` or `school`, not both.
   Spell lists include a clickable `/spell` command shortcut; enter the spell name
   after clicking it. If the shortcut cannot be resolved, `/spell` is shown as plain text.

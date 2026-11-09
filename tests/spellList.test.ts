@@ -41,6 +41,24 @@ describe('/spelllist', () => {
 		expect(command.options?.[1]).toMatchObject({ name: 'school', required: false });
 	});
 
+	it('offers all API classes and spell schools as dropdown choices', () => {
+		const command = spellList.data.toJSON();
+		const classOption = command.options?.[0];
+		const schoolOption = command.options?.[1];
+		if (!classOption || !('choices' in classOption) ||
+			!schoolOption || !('choices' in schoolOption)) {
+			throw new Error('Expected string options with choices');
+		}
+		expect(classOption.choices).toEqual([
+			'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk',
+			'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
+		].map(name => ({ name, value: name.toLowerCase() })));
+		expect(schoolOption.choices).toEqual([
+			'Abjuration', 'Conjuration', 'Divination', 'Enchantment',
+			'Evocation', 'Illusion', 'Necromancy', 'Transmutation',
+		].map(name => ({ name, value: name.toLowerCase() })));
+	});
+
 	it('normalizes the class and displays spell details in a private embed', async () => {
 		const fetchMock = jest.spyOn(globalThis, 'fetch').mockResolvedValue(
 			new Response(JSON.stringify({ data: { spells: [spell(1), spell(0)] } })),
@@ -61,9 +79,9 @@ describe('/spelllist', () => {
 			embeds: [{
 				color: 0x0099ff,
 				title: '__**Wizard Spell List**__',
-				description: '## Cantrips\n**Spell 0** - Evocation (`spell-0`) - `/spell name:Spell 0`\n',
+				description: '## Cantrips\n**Spell 0** - (`spell-0`) - `/spell name:Spell 0`\n',
 			}, expect.objectContaining({
-				description: '## Level 1\n**Spell 1** - Evocation (`spell-1`) - `/spell name:Spell 1`\n',
+				description: '## Level 1\n**Spell 1** - (`spell-1`) - `/spell name:Spell 1`\n',
 			})],
 		});
 		expect(interaction.editReply).toHaveBeenCalledTimes(1);

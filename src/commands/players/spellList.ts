@@ -64,12 +64,36 @@ export default {
 				.setName('class')
 				.setDescription('The class name, for example Wizard or Cleric.')
 				.setMaxLength(100)
+				.addChoices(
+					{ name: 'Barbarian', value: 'barbarian' },
+					{ name: 'Bard', value: 'bard' },
+					{ name: 'Cleric', value: 'cleric' },
+					{ name: 'Druid', value: 'druid' },
+					{ name: 'Fighter', value: 'fighter' },
+					{ name: 'Monk', value: 'monk' },
+					{ name: 'Paladin', value: 'paladin' },
+					{ name: 'Ranger', value: 'ranger' },
+					{ name: 'Rogue', value: 'rogue' },
+					{ name: 'Sorcerer', value: 'sorcerer' },
+					{ name: 'Warlock', value: 'warlock' },
+					{ name: 'Wizard', value: 'wizard' },
+				)
 				.setRequired(false))
 		.addStringOption(option =>
 			option
 				.setName('school')
 				.setDescription('The spell school, for example Evocation or Abjuration.')
 				.setMaxLength(100)
+				.addChoices(
+					{ name: 'Abjuration', value: 'abjuration' },
+					{ name: 'Conjuration', value: 'conjuration' },
+					{ name: 'Divination', value: 'divination' },
+					{ name: 'Enchantment', value: 'enchantment' },
+					{ name: 'Evocation', value: 'evocation' },
+					{ name: 'Illusion', value: 'illusion' },
+					{ name: 'Necromancy', value: 'necromancy' },
+					{ name: 'Transmutation', value: 'transmutation' },
+				)
 				.setRequired(false)),
 
 	async execute(interaction: ChatInputCommandInteraction) {
